@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
+import LeftNavBar from "@/components/layout/LeftNavBar";
+import TopNavbar from "@/components/layout/TopNavBar";
 import { cn } from "@/lib/utils";
 
 const merriweatherHeading = Merriweather({
@@ -67,7 +69,13 @@ export default function RootLayout({
 				merriweatherHeading.variable,
 			)}
 		>
-			<body className="min-h-full flex flex-col">{children}</body>
+			<body className="min-h-screen bg-background text-foreground">
+				<TopNavbar />
+				<div className="flex">
+					<LeftNavBar />
+					<main>{children}</main>
+				</div>
+			</body>
 		</html>
 	);
 }
