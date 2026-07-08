@@ -14,4 +14,8 @@ export default defineConfig({
 	dbCredentials: {
 		url: databaseUrl,
 	},
+	migrations: {
+		schema: "public",
+		table: "__drizzle_migrations",
+	},
 });
