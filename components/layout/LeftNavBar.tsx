@@ -32,7 +32,7 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 					const isSignedIn = Boolean(userId);
 
 					const baseClass = cn(
-						"flex items-center gap-2 rounded-md p-2 text-left transition-colors",
+						"flex items-center gap-2 rounded-md p-2 text-left transition-colors cursor-pointer",
 						isActive ? "text-primary" : "text-foreground hover:text-primary",
 					);
 
