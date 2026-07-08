@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
+import AppShell from "@/components/layout/AppShell";
 import { cn } from "@/lib/utils";
 
 const merriweatherHeading = Merriweather({
@@ -67,7 +68,9 @@ export default function RootLayout({
 				merriweatherHeading.variable,
 			)}
 		>
-			<body className="min-h-full flex flex-col">{children}</body>
+			<body className="min-h-screen overflow-hidden bg-background text-foreground">
+				<AppShell>{children}</AppShell>
+			</body>
 		</html>
 	);
 }
