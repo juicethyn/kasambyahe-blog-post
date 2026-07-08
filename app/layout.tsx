@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
+import { ClerkProvider } from "@clerk/nextjs";
 import AppShell from "@/components/layout/AppShell";
 import { cn } from "@/lib/utils";
 
@@ -69,7 +70,9 @@ export default function RootLayout({
 			)}
 		>
 			<body className="min-h-screen overflow-hidden bg-background text-foreground">
-				<AppShell>{children}</AppShell>
+				<ClerkProvider>
+					<AppShell>{children}</AppShell>
+				</ClerkProvider>
 			</body>
 		</html>
 	);

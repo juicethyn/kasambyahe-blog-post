@@ -1,5 +1,6 @@
 "use client";
 
+import { Show, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { RxHamburgerMenu } from "react-icons/rx";
@@ -16,7 +17,7 @@ export default function TopNavBar({ onToggleSidebar }: TopNavBarProps) {
 				<Button
 					variant="ghost"
 					size="icon-lg"
-					className="hidden lg:block"
+					className="hidden lg:flex"
 					onClick={onToggleSidebar}
 				>
 					<RxHamburgerMenu className="size-6" />
@@ -35,17 +36,20 @@ export default function TopNavBar({ onToggleSidebar }: TopNavBarProps) {
 			</div>
 
 			<div className="flex justify-center items-center gap-4">
-				<Button variant="outline" size="sm">
-					Sign in
-				</Button>
-				<Button
-					onClick={() => {
-						alert("Sign up clicked!");
-					}}
-					size="sm"
-				>
-					Sign up
-				</Button>
+				<Show when="signed-out">
+					<SignInButton mode="modal">
+						<Button variant="outline" size="sm">
+							Sign in
+						</Button>
+					</SignInButton>
+					<SignUpButton mode="modal">
+						<Button size="sm">Sign up</Button>
+					</SignUpButton>
+				</Show>
+
+				<Show when="signed-in">
+					<UserButton />
+				</Show>
 			</div>
 		</nav>
 	);

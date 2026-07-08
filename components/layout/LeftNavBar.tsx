@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth, useClerk } from "@clerk/nextjs";
 import { usePathname } from "next/dist/client/components/navigation";
 import Link from "next/link";
 import { NAV_LINKS } from "@/constants/navigations";
@@ -7,10 +8,13 @@ import { cn } from "@/lib/utils";
 
 interface LeftNavBarProps {
 	isOpen: boolean;
+	onRequiresAuth?: () => void;
 }
 
 export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 	const pathname = usePathname();
+	const { userId } = useAuth();
+	const { openSignIn } = useClerk();
 
 	return (
 		<aside
@@ -22,16 +26,37 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 			)}
 		>
 			<div className="px-4 py-6 flex h-full flex-col gap-2">
-				{NAV_LINKS.map((link) => (
-					<Link
-						key={link.id}
-						href={link.href}
-						className={`flex items-center gap-2 p-2 rounded-md ${pathname === link.href ? "text-primary" : "text-foreground hover:text-primary"}`}
-					>
-						<link.icon className="size-6" />
-						<span className="ml-2">{link.label}</span>
-					</Link>
-				))}
+				{NAV_LINKS.map((link) => {
+					const isActive = pathname === link.href;
+					const isProtected = link.requiresAuth && !userId;
+					const isSignedIn = Boolean(userId);
+
+					const baseClass = cn(
+						"flex items-center gap-2 rounded-md p-2 text-left transition-colors",
+						isActive ? "text-primary" : "text-foreground hover:text-primary",
+					);
+
+					if (isProtected && !isSignedIn) {
+						return (
+							<button
+								key={link.id}
+								type="button"
+								onClick={() => openSignIn()}
+								className={baseClass}
+							>
+								<link.icon className="size-6" />
+								<span className="ml-2">{link.label}</span>
+							</button>
+						);
+					}
+
+					return (
+						<Link key={link.id} href={link.href} className={baseClass}>
+							<link.icon className="size-6" />
+							<span className="ml-2">{link.label}</span>
+						</Link>
+					);
+				})}
 			</div>
 		</aside>
 	);
