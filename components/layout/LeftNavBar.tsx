@@ -18,7 +18,7 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 				"hidden h-full shrink-0 transition-all duration-300 ease-in-out lg:block",
 				isOpen
 					? "w-64 border-r-2 border-r-[FFF8F0] opacity-100"
-					: "w-0 overflow-hidden border-r-0 opacity-0",
+					: "w-0 overflow-hidden border-r border-r-[FFF8F0] opacity-0",
 			)}
 		>
 			<div className="px-4 py-6 flex h-full flex-col gap-2">

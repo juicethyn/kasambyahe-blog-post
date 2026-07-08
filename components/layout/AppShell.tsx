@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import BottomNavBar from "./BottomNavBar";
 import LeftNavBar from "./LeftNavBar";
 import TopNavbar from "./TopNavBar";
 
@@ -20,8 +21,9 @@ export default function AppShell({ children }: AppShellProps) {
 			<TopNavbar onToggleSidebar={toggleSidebar} />
 			<div className="flex flex-1 overflow-hidden">
 				<LeftNavBar isOpen={sidebarOpen} />
-				<main className="min-w-0 flex-1 overflow-y-auto">{children}</main>
+				<main className="min-w-0 flex-1 overflow-y-auto m-6">{children}</main>
 			</div>
+			<BottomNavBar />
 		</div>
 	);
 }

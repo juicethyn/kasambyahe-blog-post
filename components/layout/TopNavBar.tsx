@@ -11,9 +11,14 @@ interface TopNavBarProps {
 
 export default function TopNavBar({ onToggleSidebar }: TopNavBarProps) {
 	return (
-		<nav className="lg:sticky lg:top-0 lg:px-6 lg:h-16 z-50 hidden lg:flex justify-between border-b-2 border-b-[FFF8F0] bg-background">
+		<nav className="lg:sticky lg:top-0 px-3 lg:px-6 min-h-13 lg:h-16 z-50 flex justify-between border-b border-b-[FFF8F0] bg-background">
 			<div className="flex items-center gap-2">
-				<Button variant="ghost" size="icon-lg" onClick={onToggleSidebar}>
+				<Button
+					variant="ghost"
+					size="icon-lg"
+					className="hidden lg:block"
+					onClick={onToggleSidebar}
+				>
 					<RxHamburgerMenu className="size-6" />
 				</Button>
 				<Link href="/" className="flex items-center gap-2">
@@ -23,13 +28,13 @@ export default function TopNavBar({ onToggleSidebar }: TopNavBarProps) {
 						width={32}
 						height={32}
 					/>
-					<p className="lg:text-base lg:font-bold text-primary font-heading">
+					<p className="hidden lg:block lg:text-base lg:font-bold text-primary font-heading">
 						KasamByahe
 					</p>
 				</Link>
 			</div>
 
-			<div className="flex items-center gap-4">
+			<div className="flex justify-center items-center gap-4">
 				<Button variant="outline" size="sm">
 					Sign in
 				</Button>
