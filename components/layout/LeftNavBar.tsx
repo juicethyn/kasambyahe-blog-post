@@ -44,7 +44,7 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 								onClick={() => openSignIn()}
 								className={baseClass}
 							>
-								<link.icon className="size-6" />
+								<link.icon className="size-6" strokeWidth={1.5} />
 								<span className="ml-2">{link.label}</span>
 							</button>
 						);
@@ -52,7 +52,7 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 
 					return (
 						<Link key={link.id} href={link.href} className={baseClass}>
-							<link.icon className="size-6" />
+							<link.icon className="size-6" strokeWidth={1.5} />
 							<span className="ml-2">{link.label}</span>
 						</Link>
 					);

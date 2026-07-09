@@ -3,6 +3,7 @@
 import { useState } from "react";
 import BottomNavBar from "./BottomNavBar";
 import LeftNavBar from "./LeftNavBar";
+import RightBar from "./RightBar";
 import TopNavbar from "./TopNavBar";
 
 interface AppShellProps {
@@ -21,7 +22,10 @@ export default function AppShell({ children }: AppShellProps) {
 			<TopNavbar onToggleSidebar={toggleSidebar} />
 			<div className="flex flex-1 overflow-hidden">
 				<LeftNavBar isOpen={sidebarOpen} />
-				<main className="min-w-0 flex-1 overflow-y-auto p-6">{children}</main>
+				<main className="min-w-0 flex-1 overflow-y-auto p-3 lg:p-6">
+					{children}
+				</main>
+				<RightBar />
 			</div>
 			<BottomNavBar />
 		</div>
