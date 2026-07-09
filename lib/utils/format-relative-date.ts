@@ -1,16 +1,29 @@
 export function formatRelativeDate(date: Date) {
 	const now = new Date();
+	const diffInMs = now.getTime() - date.getTime();
 
-	// Remove time part so day comparison is cleaner
-	const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-	const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+	const minute = 1000 * 60;
+	const hour = minute * 60;
+	const day = hour * 24;
 
-	const diffInMs = today.getTime() - target.getTime();
-	const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+	if (diffInMs < minute) {
+		return "just now";
+	}
 
-	if (diffInDays <= 0) return "Today";
-	if (diffInDays === 1) return "Yesterday";
-	if (diffInDays < 7) return `${diffInDays} days ago`;
+	if (diffInMs < hour) {
+		const minutes = Math.floor(diffInMs / minute);
+		return `${minutes} ${minutes === 1 ? "min" : "mins"} ago`;
+	}
+
+	if (diffInMs < day) {
+		const hours = Math.floor(diffInMs / hour);
+		return `${hours} ${hours === 1 ? "hr" : "hrs"} ago`;
+	}
+
+	if (diffInMs < day * 7) {
+		const days = Math.floor(diffInMs / day);
+		return `${days} ${days === 1 ? "day" : "days"} ago`;
+	}
 
 	return date.toLocaleDateString("en-PH", {
 		month: "short",

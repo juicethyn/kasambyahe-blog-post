@@ -1,4 +1,6 @@
+import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
 import Image from "next/image";
+import CommentsList from "@/components/blog/CommentsList";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getCommentsByPostId } from "@/lib/db/queries/comments";
 import { getPostBySlug } from "@/lib/db/queries/posts";
@@ -19,82 +21,57 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 	const comments = await getCommentsByPostId(post.id);
 
 	return (
-		<section className="flex flex-col">
-			<div className="relative w-full max-w-4xl">
-				<AspectRatio ratio={16 / 9} className="rounded-lg bg-muted">
+		<section className="lg:mx-36 flex flex-col gap-6">
+			<div className="mx-auto w-full lg:max-w-8xl">
+				<AspectRatio ratio={16 / 9} className="overflow-hidden rounded-xl">
 					<Image
 						src={post.coverImageUrl || "https://avatar.vercel.sh/shadcn1"}
-						alt="Photo"
+						alt={post.title}
 						fill
-						className="w-full rounded-xl object-cover grayscale dark:brightness-20"
+						className="object-cover grayscale dark:brightness-20"
 					/>
 				</AspectRatio>
 			</div>
 
-			<h1>{post.title}</h1>
+			{/* Title */}
+			<h1 className="text-4xl font-bold font-merriweather">{post.title}</h1>
 
-			<hr />
+			{/* Author Details */}
 			<div>
-				<div className="flex items-center gap-3">
-					<Image
-						src={post.author.imageUrl || "https://avatar.vercel.sh/shadcn1"}
-						alt="KasamByahe cover"
-						className="max-w-xs lg:max-w-lg rounded-full object-cover"
-						width={50}
-						height={50}
-					/>
-					<div className="flex flex-col">
-						<p className="font-bold font-merriweather text-base">
-							{post.author.displayName}
-						</p>
-						<p className="text-sm text-muted-foreground">
-							{formatRelativeDate(post.createdAt)}
-						</p>
+				<hr />
+				<div className="flex items-center justify-between text-sm text-muted-foreground py-4">
+					<div className="flex items-center gap-3">
+						<Image
+							src={post.author.imageUrl || "https://avatar.vercel.sh/shadcn1"}
+							alt={post.author.displayName}
+							className="max-w-xs lg:max-w-lg rounded-full object-cover"
+							width={50}
+							height={50}
+						/>
+						<div className="flex flex-col">
+							<p className="font-bold font-merriweather text-base">
+								{post.author.displayName}
+							</p>
+							<p className="text-sm text-muted-foreground">
+								{formatRelativeDate(post.createdAt)}
+							</p>
+						</div>
+					</div>
+
+					<div className="flex gap-6 text-sm text-muted-foreground">
+						<Heart className="size-6" />
+						<MessageCircle className="size-6" />
+						<Bookmark className="size-6" />
+						<Share2 className="size-6" />
 					</div>
 				</div>
+				<hr />
 			</div>
-			<hr />
 
 			<p>{post.content}</p>
 
 			{/* Comments */}
-			<div className="space-y-4">
-				<h2 className="text-2xl font-semibold">Comments</h2>
-
-				{comments.length === 0 ? (
-					<p className="text-muted-foreground">No comments yet.</p>
-				) : (
-					<div className="space-y-4">
-						{comments.map((comment) => (
-							<div
-								key={comment.id}
-								className="rounded-lg border border-border bg-card p-4"
-							>
-								<div className="mb-2 flex items-center gap-3">
-									<Image
-										src={
-											comment.author.imageUrl ||
-											"https://avatar.vercel.sh/shadcn1"
-										}
-										height={100}
-										width={100}
-										alt={comment.author.displayName}
-										className="h-10 w-10 rounded-full object-cover"
-									/>
-									<div>
-										<p className="font-medium">{comment.author.displayName}</p>
-										<p className="text-sm text-muted-foreground">
-											{comment.author.username}
-										</p>
-									</div>
-								</div>
-
-								<p className="text-sm leading-7">{comment.content}</p>
-							</div>
-						))}
-					</div>
-				)}
-			</div>
+			<CommentsList comments={comments} postAuthorId={post.author.id} />
 		</section>
 	);
 }
