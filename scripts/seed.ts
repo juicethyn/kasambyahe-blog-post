@@ -60,7 +60,7 @@ async function main() {
 		] as NewPost[])
 		.returning();
 
-	if (insertedPosts.length <= 2) {
+	if (insertedPosts.length >= 2) {
 		await db.insert(comments).values([
 			{
 				postId: insertedPosts[0].id,

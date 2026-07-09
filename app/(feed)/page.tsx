@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import PostCards from "@/components/cards/PostCard";
+import PostCardSkeleton from "@/components/skeletons/PostCardSkeleton";
 import { getFeedPosts } from "@/lib/db/queries/posts";
 
 export default async function Home() {
@@ -17,7 +19,6 @@ export default async function Home() {
 					confidence.
 				</h2>
 			</div>
-
 			{/* Filtering and Sorting Options Turn - Make it a Client Component because it uses Button*/}
 			<div className="flex justify-between items-center mb-4 font-merriweather font-medium">
 				<div className="flex gap-4">
@@ -30,24 +31,13 @@ export default async function Home() {
 				</div>
 			</div>
 
-			<PostCards post={posts[0]} />
-
-			{/* Posts List
-			<div>
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 				{posts.map((post) => (
-					<div key={post.id}>
-						<h3>{post.title}</h3>
-						<p>{post.content}</p>
-						<p>By {post.author.displayName}</p>
-						<Image
-							src={post.author.imageUrl || "/default-profile.png"}
-							alt={post.author.displayName}
-							width={50}
-							height={50}
-						/>
-					</div>
+					<Suspense fallback={<PostCardSkeleton />} key={post.id}>
+						<PostCards post={post} />
+					</Suspense>
 				))}
-			</div> */}
+			</div>
 		</div>
 	);
 }

@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter, Merriweather } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
-import AppShell from "@/components/layout/AppShell";
 import { cn } from "@/lib/utils";
 
 const merriweatherHeading = Merriweather({
@@ -69,11 +68,11 @@ export default function RootLayout({
 				merriweatherHeading.variable,
 			)}
 		>
-			<body className="min-h-screen overflow-hidden bg-background text-foreground">
-				<ClerkProvider>
-					<AppShell>{children}</AppShell>
-				</ClerkProvider>
-			</body>
+			<ClerkProvider>
+				<body className="min-h-screen overflow-hidden bg-background text-foreground">
+					{children}
+				</body>
+			</ClerkProvider>
 		</html>
 	);
 }
