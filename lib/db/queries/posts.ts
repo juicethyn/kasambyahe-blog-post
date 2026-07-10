@@ -10,6 +10,7 @@ export async function getFeedPosts(): Promise<FeedPost[]> {
 			title: posts.title,
 			slug: posts.slug,
 			coverImageUrl: posts.coverImageUrl,
+			excerpt: posts.excerpt,
 			content: posts.content,
 			createdAt: posts.createdAt,
 			author: {
@@ -28,6 +29,7 @@ export async function getFeedPosts(): Promise<FeedPost[]> {
 		title: row.title,
 		coverImageUrl: row.coverImageUrl,
 		slug: row.slug,
+		excerpt: row.excerpt,
 		content: row.content,
 		createdAt: row.createdAt,
 		author: {
@@ -46,6 +48,7 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 			title: posts.title,
 			slug: posts.slug,
 			coverImageUrl: posts.coverImageUrl,
+			excerpt: posts.excerpt,
 			content: posts.content,
 			createdAt: posts.createdAt,
 			author: {
@@ -68,6 +71,7 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 		title: row.title,
 		coverImageUrl: row.coverImageUrl,
 		slug: row.slug,
+		excerpt: row.excerpt,
 		content: row.content,
 		createdAt: row.createdAt,
 		author: {

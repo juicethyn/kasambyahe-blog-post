@@ -3,6 +3,7 @@ export interface FeedPost {
 	title: string;
 	coverImageUrl: string | null;
 	slug: string;
+	excerpt: string;
 	content: string;
 	createdAt: Date;
 	author: {

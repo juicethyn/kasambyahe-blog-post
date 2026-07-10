@@ -38,7 +38,7 @@ export default function PostCard({ post }: PostCardProps) {
 				<CardHeader>
 					<CardTitle className="text-2xl font-bold">{post.title}</CardTitle>
 					<CardDescription className="text-base text-foreground">
-						{truncateText(post.content, 100)}
+						{truncateText(post.excerpt, 100)}
 					</CardDescription>
 					<hr className="mt-4" />
 				</CardHeader>
