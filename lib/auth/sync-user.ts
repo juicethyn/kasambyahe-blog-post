@@ -10,7 +10,7 @@ export async function syncUser() {
 	const clerkUser = await currentUser();
 
 	if (!clerkUser) {
-		throw new Error("No authenticated user found.");
+		return null;
 	}
 
 	const existingUser = await getUserByClerkUserId(clerkUser.id);

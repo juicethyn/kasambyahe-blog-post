@@ -1,10 +1,14 @@
 import { syncUser } from "@/lib/auth/sync-user";
 
+export async function getCurrentDbUserOrNull() {
+	return await syncUser();
+}
+
 export async function getCurrentDbUser() {
-	const user = await syncUser();
+	const user = await getCurrentDbUserOrNull();
 
 	if (!user) {
-		throw new Error("Unauthorized.");
+		return null;
 	}
 
 	return user;

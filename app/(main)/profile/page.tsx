@@ -5,8 +5,8 @@ export default async function ProfilePage() {
 
 	return (
 		<div>
-			<h1>{user.displayName}</h1>
-			<h1>{user.displayName}</h1>
+			<h1>{user?.displayName}</h1>
+			<h1>{user?.displayName}</h1>
 		</div>
 	);
 }
