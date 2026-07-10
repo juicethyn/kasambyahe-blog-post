@@ -1,29 +1,26 @@
-import { BsPerson } from "react-icons/bs";
-import { GoHome } from "react-icons/go";
-import { IoBookmarksOutline } from "react-icons/io5";
-import { RxPencil2 } from "react-icons/rx";
+import { Bookmark, CircleUser, House, SquarePen } from "lucide-react";
 
 export const NAV_LINKS = [
-	{ id: "home", label: "Home", href: "/", icon: GoHome, requiresAuth: false },
+	{ id: "home", label: "Home", href: "/", icon: House, requiresAuth: false },
 	{
 		id: "saved",
 		label: "Saved",
 		href: "/saved",
-		icon: IoBookmarksOutline,
+		icon: Bookmark,
 		requiresAuth: true,
 	},
 	{
 		id: "write",
 		label: "Write",
 		href: "/write",
-		icon: RxPencil2,
+		icon: SquarePen,
 		requiresAuth: true,
 	},
 	{
 		id: "profile",
 		label: "Profile",
 		href: "/profile",
-		icon: BsPerson,
+		icon: CircleUser,
 		requiresAuth: true,
 	},
 ];
