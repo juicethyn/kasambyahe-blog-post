@@ -1,10 +1,12 @@
+export type PostContent = Record<string, unknown>[];
 export interface FeedPost {
 	id: string;
 	title: string;
 	coverImageUrl: string | null;
+	coverImageKey: string | null;
 	slug: string;
 	excerpt: string;
-	content: string;
+	content: PostContent;
 	createdAt: Date;
 	author: {
 		id: string;
@@ -12,4 +14,12 @@ export interface FeedPost {
 		displayName: string;
 		imageUrl: string | null;
 	};
+}
+
+export interface PostFormValues {
+	title: string;
+	excerpt: string;
+	coverImageUrl: string | null;
+	coverImageKey: string | null;
+	content: PostContent;
 }

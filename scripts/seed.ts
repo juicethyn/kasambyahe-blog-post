@@ -2,6 +2,7 @@ import "dotenv/config";
 import { eq, type InferInsertModel } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { comments, likes, posts, savedPosts, users } from "@/lib/db/schema";
+import type { PostContent } from "@/lib/types/post";
 
 const seedClerkUserId = process.env.SEED_CLERK_USER_ID;
 
@@ -9,6 +10,28 @@ if (!seedClerkUserId) {
 	throw new Error(
 		"SEED_CLERK_USER_ID is not defined in the environment variables.",
 	);
+}
+
+function paragraph(text: string): PostContent {
+	return [
+		{
+			id: crypto.randomUUID(),
+			type: "paragraph",
+			props: {
+				textColor: "default",
+				backgroundColor: "default",
+				textAlignment: "left",
+			},
+			content: [
+				{
+					type: "text",
+					text,
+					styles: {},
+				},
+			],
+			children: [],
+		},
+	];
 }
 
 type NewPost = InferInsertModel<typeof posts>;
@@ -39,14 +62,14 @@ async function main() {
 				slug: "weekend-food-crawl-binondo",
 				excerpt:
 					"A quick guide to spending a day eating your way through Binondo.",
-				content: "Seeded body content here...",
+				content: paragraph("Seeded body content here..."),
 				authorId: author.id,
 			},
 			{
 				title: "What I Learned from a Solo Trip to Siargao",
 				slug: "solo-trip-siargao-learnings",
 				excerpt: "Things I wish I knew before planning a solo island trip.",
-				content: "Seeded body content here...",
+				content: paragraph("Seeded body content here..."),
 				authorId: author.id,
 			},
 			{
@@ -54,7 +77,7 @@ async function main() {
 				slug: "three-cafes-baguio",
 				excerpt:
 					"A short list of cafes worth returning to for coffee and atmosphere.",
-				content: "Seeded body content here...",
+				content: paragraph("Seeded body content here..."),
 				authorId: author.id,
 			},
 		] as NewPost[])

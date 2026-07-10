@@ -16,6 +16,18 @@ const nextConfig: NextConfig = {
 				port: "", // Leave empty unless the URL explicitly uses a port
 				pathname: "/**", // Allows all image paths from this host
 			},
+			{
+				protocol: "https", // Use 'https' if your source is secured
+				hostname: "*utfs.io",
+				port: "", // Leave empty unless the URL explicitly uses a port
+				pathname: "/**", // Allows all image paths from this host
+			},
+			{
+				protocol: "https", // Use 'https' if your source is secured
+				hostname: "*.ufs.sh",
+				port: "", // Leave empty unless the URL explicitly uses a port
+				pathname: "/**", // Allows all image paths from this host
+			},
 		],
 	},
 };

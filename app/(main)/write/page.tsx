@@ -1,3 +1,5 @@
+import PostEditorForm from "@/components/forms/PostEditorForm";
+
 export default function WritePage() {
-	return <div>Write Page</div>;
+	return <PostEditorForm mode="create" />;
 }

@@ -1,7 +1,7 @@
 {
 	"version": "8",
 	"dialect": "postgres",
-	"id": "84d9c21c-cf1f-4870-aa4c-0d3d09e1069d",
+	"id": "9ac9688e-dcc7-4ea1-859a-029b1bd43495",
 	"prevIds": ["00000000-0000-0000-0000-000000000000"],
 	"ddl": [
 		{
@@ -236,7 +236,7 @@
 			"table": "posts"
 		},
 		{
-			"type": "text",
+			"type": "jsonb",
 			"typeSchema": null,
 			"notNull": true,
 			"dimensions": 0,

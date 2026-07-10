@@ -10,6 +10,7 @@ export async function getFeedPosts(): Promise<FeedPost[]> {
 			title: posts.title,
 			slug: posts.slug,
 			coverImageUrl: posts.coverImageUrl,
+			coverImageKey: posts.coverImageKey,
 			excerpt: posts.excerpt,
 			content: posts.content,
 			createdAt: posts.createdAt,
@@ -28,6 +29,7 @@ export async function getFeedPosts(): Promise<FeedPost[]> {
 		id: row.id,
 		title: row.title,
 		coverImageUrl: row.coverImageUrl,
+		coverImageKey: row.coverImageKey,
 		slug: row.slug,
 		excerpt: row.excerpt,
 		content: row.content,
@@ -48,6 +50,7 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 			title: posts.title,
 			slug: posts.slug,
 			coverImageUrl: posts.coverImageUrl,
+			coverImageKey: posts.coverImageKey,
 			excerpt: posts.excerpt,
 			content: posts.content,
 			createdAt: posts.createdAt,
@@ -70,6 +73,7 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 		id: row.id,
 		title: row.title,
 		coverImageUrl: row.coverImageUrl,
+		coverImageKey: row.coverImageKey,
 		slug: row.slug,
 		excerpt: row.excerpt,
 		content: row.content,
@@ -81,4 +85,19 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 			imageUrl: row.author.imageUrl,
 		},
 	};
+}
+
+export async function getPostById(postId: string) {
+	const [row] = await db
+		.select({
+			id: posts.id,
+			authorId: posts.authorId,
+			coverImageUrl: posts.coverImageUrl,
+			coverImageKey: posts.coverImageKey,
+		})
+		.from(posts)
+		.where(eq(posts.id, postId))
+		.limit(1);
+
+	return row ?? null;
 }

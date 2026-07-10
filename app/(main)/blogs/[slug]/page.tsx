@@ -1,7 +1,10 @@
 import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
 import Image from "next/image";
-import CommentsList from "@/components/blog/CommentsList";
+import Link from "next/link";
+import CommentsList from "@/components/blogs/CommentsList";
+import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import { getCommentsByPostId } from "@/lib/db/queries/comments";
 import { getPostBySlug } from "@/lib/db/queries/posts";
 import { formatRelativeDate } from "@/lib/utils/format-relative-date";
@@ -18,10 +21,14 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 		return <div>Post not found</div>;
 	}
 
+	const dbUser = await getCurrentDbUserOrNull();
 	const comments = await getCommentsByPostId(post.id);
 
 	return (
 		<section className="lg:mx-36 flex flex-col gap-6">
+			{dbUser?.id === post.author.id ? (
+				<Link href={`/blogs/${post.slug}/edit`}>Edit post</Link>
+			) : null}
 			<div className="mx-auto w-full lg:max-w-8xl">
 				<AspectRatio ratio={16 / 9} className="overflow-hidden rounded-xl">
 					<Image
@@ -68,7 +75,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 				<hr />
 			</div>
 
-			<p>{post.content}</p>
+			<BlockNoteRenderer content={post.content} />
 
 			{/* Comments */}
 			<CommentsList comments={comments} postAuthorId={post.author.id} />
