@@ -1,25 +1,33 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createPostAction } from "@/lib/actions/posts";
-import type { CreatePostFormState } from "@/lib/validations/post";
+import { createPostAction, updatePostAction } from "@/lib/actions/posts";
+import type { PostContent, PostFormValues } from "@/lib/types/post";
+import type { PostFormState } from "@/lib/validations/post";
 import BlockNoteEditor from "./BlockNoteEditor";
 
-const initialState: CreatePostFormState = {
+const initialState: PostFormState = {
 	success: false,
 	errors: {},
 };
 
-function SubmitButton() {
+interface SubmitButtonProps {
+	mode: "create" | "edit";
+}
+
+function SubmitButton({ mode }: SubmitButtonProps) {
 	const { pending } = useFormStatus();
+
+	const label = mode === "create" ? "Create Post" : "Save Changes";
+	const pendingLabel = mode === "create" ? "Creating..." : "Saving...";
 
 	return (
 		<Button type="submit" disabled={pending}>
-			{pending ? "Creating..." : "Create Post"}
+			{pending ? pendingLabel : label}
 		</Button>
 	);
 }
@@ -34,15 +42,47 @@ function FieldError({ error }: FieldErrorProps) {
 	return <p className="text-sm text-red-500">{error}</p>;
 }
 
-export default function CreatePostForm() {
-	const [content, setContent] = useState<string>("");
-	const [state, formAction] = useActionState(createPostAction, initialState);
+interface PostEditorFormProps {
+	mode: "create" | "edit";
+	initialValues?: PostFormValues;
+	postId?: string;
+}
+
+const DEFAULT_POST_CONTENT: PostContent = [
+	{
+		type: "paragraph",
+		content: "",
+	},
+];
+
+export default function PostEditorForm({
+	mode,
+	initialValues,
+	postId,
+}: PostEditorFormProps) {
+	const defaults = useMemo<PostFormValues>(
+		() => ({
+			title: initialValues?.title ?? "",
+			excerpt: initialValues?.excerpt ?? "",
+			coverImageUrl: initialValues?.coverImageUrl ?? "",
+			content: initialValues?.content ?? DEFAULT_POST_CONTENT,
+		}),
+		[initialValues],
+	);
+
+	const [content, setContent] = useState<PostContent>(defaults.content);
+	const action = mode === "create" ? createPostAction : updatePostAction;
+	const [state, formAction] = useActionState(action, initialState);
 
 	return (
 		<form
 			action={formAction}
 			className="mx-auto flex w-full max-w-5xl flex-col gap-8"
 		>
+			{mode === "edit" && postId ? (
+				<input type="hidden" name="postId" value={postId} />
+			) : null}
+
 			{/* Header */}
 			<div className="space-y-2">
 				<h1 className="text-3xl font-bold tracking-tight">Write a post</h1>
@@ -63,6 +103,7 @@ export default function CreatePostForm() {
 							id="title"
 							name="title"
 							placeholder="e.g. My first ride to Tagaytay at 5AM"
+							defaultValue={defaults.title}
 						/>
 						<FieldError error={state.errors?.title?.[0]} />
 					</div>
@@ -75,6 +116,7 @@ export default function CreatePostForm() {
 						<Textarea
 							id="excerpt"
 							name="excerpt"
+							defaultValue={defaults.excerpt}
 							placeholder="Write a short preview for the feed..."
 							className="min-h-28 resize-none"
 						/>
@@ -93,6 +135,7 @@ export default function CreatePostForm() {
 							id="coverImageUrl"
 							name="coverImageUrl"
 							placeholder="https://example.com/cover.jpg"
+							defaultValue={defaults.coverImageUrl ?? ""}
 						/>
 						<p className="text-xs text-muted-foreground">
 							Optional. Add a cover image for the feed card and post header.
@@ -110,10 +153,17 @@ export default function CreatePostForm() {
 						</div>
 
 						<div className="overflow-hidden rounded-2xl border bg-background">
-							<BlockNoteEditor onChange={setContent} />
+							<BlockNoteEditor
+								initialContent={defaults.content}
+								onChange={setContent}
+							/>
 						</div>
 
-						<input type="hidden" name="content" value={content} />
+						<input
+							type="hidden"
+							name="content"
+							value={JSON.stringify(content)}
+						/>
 						<FieldError error={state.errors?.content?.[0]} />
 					</div>
 
@@ -126,7 +176,7 @@ export default function CreatePostForm() {
 
 					{/* Actions */}
 					<div className="flex items-center justify-end gap-3 border-t pt-4">
-						<SubmitButton />
+						<SubmitButton mode={mode} />
 					</div>
 				</div>
 			</div>

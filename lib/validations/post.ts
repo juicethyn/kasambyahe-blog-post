@@ -1,39 +1,45 @@
 import { z } from "zod";
 
-export const createPostSchema = z.object({
+const postContentSchema = z.array(z.record(z.string(), z.unknown()));
+
+const basePostSchema = z.object({
 	title: z
 		.string()
 		.trim()
 		.min(5, "Title must be at least 5 characters long")
 		.max(120, "Title must be at most 120 characters long"),
+
 	excerpt: z
 		.string()
 		.trim()
 		.min(20, "Excerpt must be at least 20 characters long")
 		.max(1000, "Excerpt must be at most 1000 characters long"),
+
 	coverImageUrl: z
 		.string()
-		.url("Cover image must be a valid URL")
-		.optional()
-		.or(z.literal("").transform(() => undefined)), // Allow empty string to be treated as undefined
-	content: z
-		.string()
 		.trim()
-		.min(2, "Content must be at least 2 characters long")
-		.refine((value) => {
-			try {
-				JSON.parse(value);
-				return true;
-			} catch {
-				return false;
-			}
-		}, "Content must be valid JSON"),
+		.optional()
+		.refine((value) => !value || URL.canParse(value), {
+			message: "Cover image must be a valid URL",
+		})
+		.transform((value) => (value ? value : undefined)),
+
+	content: postContentSchema,
+});
+
+export const createPostSchema = basePostSchema;
+
+export const updatePostSchema = basePostSchema.extend({
+	postId: z.string().uuid("Invalid post ID"),
 });
 
 export type CreatePostFormValues = z.infer<typeof createPostSchema>;
+export type UpdatePostFormValues = z.infer<typeof updatePostSchema>;
 
-export type CreatePostFormState = {
+export type PostFormState = {
 	success: boolean;
 	message?: string;
-	errors?: Partial<Record<keyof CreatePostFormValues, string[]>>;
+	errors?: Partial<
+		Record<keyof (CreatePostFormValues & { postId?: string }), string[]>
+	>;
 };

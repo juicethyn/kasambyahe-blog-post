@@ -1,8 +1,11 @@
 import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
+import { redirect } from "next/dist/client/components/navigation";
 import Image from "next/image";
+import Link from "next/link";
 import BlockNoteRenderer from "@/components/blogs/BlockNoteRenderer";
 import CommentsList from "@/components/blogs/CommentsList";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { getCurrentDbUser } from "@/lib/auth/get-current-db-user";
 import { getCommentsByPostId } from "@/lib/db/queries/comments";
 import { getPostBySlug } from "@/lib/db/queries/posts";
 import { formatRelativeDate } from "@/lib/utils/format-relative-date";
@@ -19,10 +22,19 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 		return <div>Post not found</div>;
 	}
 
+	const dbUser = await getCurrentDbUser();
+
+	if (!dbUser || dbUser.id !== post.author.id) {
+		redirect(`/blogs/${post.slug}`);
+	}
+
 	const comments = await getCommentsByPostId(post.id);
 
 	return (
 		<section className="lg:mx-36 flex flex-col gap-6">
+			{dbUser?.id === post.author.id ? (
+				<Link href={`/blogs/${post.slug}/edit`}>Edit post</Link>
+			) : null}
 			<div className="mx-auto w-full lg:max-w-8xl">
 				<AspectRatio ratio={16 / 9} className="overflow-hidden rounded-xl">
 					<Image

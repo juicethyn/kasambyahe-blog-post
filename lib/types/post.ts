@@ -14,3 +14,10 @@ export interface FeedPost {
 		imageUrl: string | null;
 	};
 }
+
+export interface PostFormValues {
+	title: string;
+	excerpt: string;
+	coverImageUrl: string | null;
+	content: PostContent;
+}
