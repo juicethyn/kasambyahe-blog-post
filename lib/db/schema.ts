@@ -41,6 +41,7 @@ export const posts = pgTable("posts", {
 	slug: text("slug").notNull().unique(),
 	excerpt: text("excerpt").notNull(),
 	coverImageUrl: text("cover_image_url"),
+	coverImageKey: text("cover_image_key"),
 	content: jsonb("content").$type<PostContent>().notNull(), // The body of the content
 	published: boolean("published").default(true).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),

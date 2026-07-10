@@ -1,5 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 import PostEditorForm from "@/components/forms/PostEditorForm";
+import { Button } from "@/components/ui/button";
+import { deletePostAction } from "@/lib/actions/posts";
 import { getCurrentDbUser } from "@/lib/auth/get-current-db-user";
 import { getPostBySlug } from "@/lib/db/queries/posts";
 
@@ -33,6 +35,13 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 				</p>
 			</div>
 
+			<form action={deletePostAction}>
+				<input type="hidden" name="postId" value={post.id} />
+				<Button type="submit" variant="destructive">
+					Delete post
+				</Button>
+			</form>
+
 			<PostEditorForm
 				mode="edit"
 				postId={post.id}
@@ -40,6 +49,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 					title: post.title,
 					excerpt: post.excerpt,
 					coverImageUrl: post.coverImageUrl,
+					coverImageKey: post.coverImageKey,
 					content: post.content,
 				}}
 			/>

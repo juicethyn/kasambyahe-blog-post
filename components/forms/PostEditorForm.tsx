@@ -8,7 +8,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { createPostAction, updatePostAction } from "@/lib/actions/posts";
 import type { PostContent, PostFormValues } from "@/lib/types/post";
 import type { PostFormState } from "@/lib/validations/post";
-import BlockNoteEditor from "./BlockNoteEditor";
+import { BlockNoteEditor } from "../blogs/DynamicEditor";
+import CoverImageUpload from "./CoverImageUpload";
 
 const initialState: PostFormState = {
 	success: false,
@@ -65,6 +66,7 @@ export default function PostEditorForm({
 			title: initialValues?.title ?? "",
 			excerpt: initialValues?.excerpt ?? "",
 			coverImageUrl: initialValues?.coverImageUrl ?? "",
+			coverImageKey: initialValues?.coverImageKey ?? "",
 			content: initialValues?.content ?? DEFAULT_POST_CONTENT,
 		}),
 		[initialValues],
@@ -73,6 +75,18 @@ export default function PostEditorForm({
 	const [content, setContent] = useState<PostContent>(defaults.content);
 	const action = mode === "create" ? createPostAction : updatePostAction;
 	const [state, formAction] = useActionState(action, initialState);
+
+	const [coverImage, setCoverImage] = useState<{
+		url: string;
+		key: string;
+	} | null>(
+		defaults.coverImageUrl
+			? {
+					url: defaults.coverImageUrl ?? "",
+					key: defaults.coverImageKey ?? "",
+				}
+			: null,
+	);
 
 	return (
 		<form
@@ -128,19 +142,24 @@ export default function PostEditorForm({
 
 					{/* Cover image URL */}
 					<div className="space-y-2">
-						<label htmlFor="coverImageUrl" className="text-sm font-medium">
-							Cover image URL
-						</label>
-						<Input
-							id="coverImageUrl"
-							name="coverImageUrl"
-							placeholder="https://example.com/cover.jpg"
-							defaultValue={defaults.coverImageUrl ?? ""}
+						<CoverImageUpload
+							value={coverImage?.url ?? ""}
+							onChange={setCoverImage}
 						/>
-						<p className="text-xs text-muted-foreground">
-							Optional. Add a cover image for the feed card and post header.
-						</p>
+
+						<input
+							type="hidden"
+							name="coverImageUrl"
+							value={coverImage?.url ?? ""}
+						/>
+						<input
+							type="hidden"
+							name="coverImageKey"
+							value={coverImage?.key ?? ""}
+						/>
+
 						<FieldError error={state.errors?.coverImageUrl?.[0]} />
+						<FieldError error={state.errors?.coverImageKey?.[0]} />
 					</div>
 
 					{/* Editor */}

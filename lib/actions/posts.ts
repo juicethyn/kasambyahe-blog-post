@@ -10,10 +10,12 @@ import { posts, users } from "@/lib/db/schema";
 import { slugify } from "@/lib/utils/slug";
 import {
 	createPostSchema,
+	deletePostSchema,
 	type PostFormState,
 	updatePostSchema,
 } from "@/lib/validations/post";
 import { getCurrentDbUser } from "../auth/get-current-db-user";
+import { utapi } from "../uploadthing-server";
 
 export async function createPostAction(
 	_prevState: PostFormState,
@@ -44,6 +46,7 @@ export async function createPostAction(
 		title: String(formData.get("title") ?? ""),
 		excerpt: String(formData.get("excerpt") ?? ""),
 		coverImageUrl: String(formData.get("coverImageUrl") ?? ""),
+		coverImageKey: String(formData.get("coverImageKey") ?? ""),
 		content: parsedContent,
 	};
 
@@ -69,7 +72,8 @@ export async function createPostAction(
 		};
 	}
 
-	const { title, excerpt, coverImageUrl, content } = validatedFields.data;
+	const { title, excerpt, coverImageUrl, coverImageKey, content } =
+		validatedFields.data;
 	const slug = slugify(title);
 
 	await db.insert(posts).values({
@@ -77,6 +81,7 @@ export async function createPostAction(
 		slug,
 		excerpt,
 		coverImageUrl: coverImageUrl || null,
+		coverImageKey: coverImageKey || null,
 		content: content,
 		authorId: dbUser.id,
 	});
@@ -119,6 +124,7 @@ export async function updatePostAction(
 		title: String(formData.get("title") ?? ""),
 		excerpt: String(formData.get("excerpt") ?? ""),
 		coverImageUrl: String(formData.get("coverImageUrl") ?? ""),
+		coverImageKey: String(formData.get("coverImageKey") ?? ""),
 		content: parsedContent,
 		postId: String(rawPostId),
 	});
@@ -127,6 +133,7 @@ export async function updatePostAction(
 		return {
 			success: false,
 			errors: validatedFields.error.flatten().fieldErrors,
+			message: "Validation failed. Please check the form fields.",
 		};
 	}
 
@@ -146,6 +153,8 @@ export async function updatePostAction(
 			id: posts.id,
 			authorId: posts.authorId,
 			slug: posts.slug,
+			coverImageUrl: posts.coverImageUrl,
+			coverImageKey: posts.coverImageKey,
 		})
 		.from(posts)
 		.where(eq(posts.id, data.postId))
@@ -165,20 +174,80 @@ export async function updatePostAction(
 		};
 	}
 
+	const oldCoverImageKey = existingPost.coverImageKey ?? null;
+	const newCoverImageKey = data.coverImageKey ?? null;
+
 	await db
 		.update(posts)
 		.set({
 			title: data.title,
 			excerpt: data.excerpt,
 			coverImageUrl: data.coverImageUrl || null,
+			coverImageKey: newCoverImageKey || null,
 			content: data.content,
 			updatedAt: new Date(),
 		})
 		.where(eq(posts.id, data.postId));
+
+	const imageChanged =
+		oldCoverImageKey && oldCoverImageKey !== newCoverImageKey;
+
+	if (imageChanged) {
+		try {
+			await utapi.deleteFiles([oldCoverImageKey] as string[]);
+		} catch (error) {
+			console.error("Error deleting old cover image:", error);
+		}
+	}
 
 	revalidatePath("/");
 	revalidatePath(`/blogs/${existingPost.slug}`);
 	revalidatePath(`/blogs/${existingPost.slug}/edit`);
 
 	redirect(`/blogs/${existingPost.slug}`);
+
+	return {
+		success: true,
+		message: "Post updated successfully.",
+		errors: {},
+	};
+}
+
+export async function deletePostAction(formData: FormData) {
+	const validatedFields = deletePostSchema.safeParse({
+		postId: formData.get("postId"),
+	});
+
+	if (!validatedFields.success) {
+		throw new Error("Invalid post ID.");
+	}
+
+	const { postId } = validatedFields.data;
+
+	const dbUser = await getCurrentDbUser();
+
+	const [existingPost] = await db
+		.select({
+			id: posts.id,
+			slug: posts.slug,
+			authorId: posts.authorId,
+		})
+		.from(posts)
+		.where(eq(posts.id, postId))
+		.limit(1);
+
+	if (!existingPost) {
+		throw new Error("Post not found.");
+	}
+
+	if (existingPost.authorId !== dbUser?.id) {
+		throw new Error("You are not allowed to delete this post.");
+	}
+
+	await db.delete(posts).where(eq(posts.id, postId));
+
+	revalidatePath("/");
+	revalidatePath(`/blogs/${existingPost.slug}`);
+
+	redirect("/");
 }

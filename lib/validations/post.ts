@@ -24,12 +24,22 @@ const basePostSchema = z.object({
 		})
 		.transform((value) => (value ? value : undefined)),
 
+	coverImageKey: z
+		.string()
+		.trim()
+		.optional()
+		.transform((value) => (value ? value : undefined)),
+
 	content: postContentSchema,
 });
 
 export const createPostSchema = basePostSchema;
 
 export const updatePostSchema = basePostSchema.extend({
+	postId: z.string().uuid("Invalid post ID"),
+});
+
+export const deletePostSchema = z.object({
 	postId: z.string().uuid("Invalid post ID"),
 });
 

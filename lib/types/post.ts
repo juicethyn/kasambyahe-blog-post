@@ -3,6 +3,7 @@ export interface FeedPost {
 	id: string;
 	title: string;
 	coverImageUrl: string | null;
+	coverImageKey: string | null;
 	slug: string;
 	excerpt: string;
 	content: PostContent;
@@ -19,5 +20,6 @@ export interface PostFormValues {
 	title: string;
 	excerpt: string;
 	coverImageUrl: string | null;
+	coverImageKey: string | null;
 	content: PostContent;
 }
