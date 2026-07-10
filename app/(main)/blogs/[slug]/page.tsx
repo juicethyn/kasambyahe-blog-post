@@ -1,6 +1,7 @@
 import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
 import Image from "next/image";
-import CommentsList from "@/components/blog/CommentsList";
+import BlockNoteRenderer from "@/components/blogs/BlockNoteRenderer";
+import CommentsList from "@/components/blogs/CommentsList";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getCommentsByPostId } from "@/lib/db/queries/comments";
 import { getPostBySlug } from "@/lib/db/queries/posts";
@@ -68,7 +69,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 				<hr />
 			</div>
 
-			<p>{post.content}</p>
+			<BlockNoteRenderer content={post.content} />
 
 			{/* Comments */}
 			<CommentsList comments={comments} postAuthorId={post.author.id} />

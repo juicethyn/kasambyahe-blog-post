@@ -21,7 +21,7 @@ CREATE TABLE "posts" (
 	"slug" text NOT NULL UNIQUE,
 	"excerpt" text NOT NULL,
 	"cover_image_url" text,
-	"content" text NOT NULL,
+	"content" jsonb NOT NULL,
 	"published" boolean DEFAULT true NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL

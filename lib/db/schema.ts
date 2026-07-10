@@ -1,6 +1,7 @@
 import {
 	boolean,
 	index,
+	jsonb,
 	pgEnum,
 	pgTable,
 	text,
@@ -8,6 +9,7 @@ import {
 	uniqueIndex,
 	uuid,
 } from "drizzle-orm/pg-core";
+import type { PostContent } from "@/lib/types/post";
 
 export const userRoleEnum = pgEnum("user_role", ["user", "admin"]);
 
@@ -39,7 +41,7 @@ export const posts = pgTable("posts", {
 	slug: text("slug").notNull().unique(),
 	excerpt: text("excerpt").notNull(),
 	coverImageUrl: text("cover_image_url"),
-	content: text("content").notNull(), // The body of the content
+	content: jsonb("content").$type<PostContent>().notNull(), // The body of the content
 	published: boolean("published").default(true).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 	updatedAt: timestamp("updated_at").defaultNow().notNull(),
