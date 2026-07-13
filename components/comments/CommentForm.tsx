@@ -39,13 +39,13 @@ export default function CommentForm({
 
 	useEffect(() => {
 		if (state.success && formRef.current && onCommentSubmit) {
-			formRef.current.reset();
+			formRef.current?.reset();
 			onCommentSubmit();
 		}
-	}, [state.success, onCommentSubmit]);
+	}, [state, onCommentSubmit]);
 
 	return (
-		<form action={formAction}>
+		<form action={formAction} ref={formRef}>
 			<input type="hidden" name="postId" value={postId} />
 
 			<Textarea name="content" placeholder="Share your thoughts..." />
