@@ -1,8 +1,9 @@
 import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import CommentsList from "@/components/blogs/CommentsList";
 import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
+import CommentForm from "@/components/comments/CommentForm";
+import CommentsList from "@/components/comments/CommentsList";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import { getCommentsByPostId } from "@/lib/db/queries/comments";
@@ -78,6 +79,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 			<BlockNoteRenderer content={post.content} />
 
 			{/* Comments */}
+			<CommentForm postId={post.id} />
 			<CommentsList comments={comments} postAuthorId={post.author.id} />
 		</section>
 	);

@@ -5,6 +5,8 @@ import { comments, users } from "../schema";
 
 export async function getCommentsByPostId(
 	postId: string,
+	_page = 1,
+	_pageSize = 3,
 ): Promise<PostComment[]> {
 	const rows = await db
 		.select({
@@ -34,4 +36,25 @@ export async function getCommentsByPostId(
 			imageUrl: row.author.imageUrl,
 		},
 	}));
+}
+
+export async function createComment({
+	postId,
+	authorId,
+	content,
+}: {
+	postId: string;
+	authorId: string;
+	content: string;
+}) {
+	const [comment] = await db
+		.insert(comments)
+		.values({
+			postId,
+			authorId,
+			content,
+		})
+		.returning();
+
+	return comment;
 }

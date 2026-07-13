@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import PostEditorForm from "@/components/forms/PostEditorForm";
+import PostEditorForm from "@/components/posts/PostEditorForm";
 import { Button } from "@/components/ui/button";
 import { deletePostAction } from "@/lib/actions/posts";
 import { getCurrentDbUser } from "@/lib/auth/get-current-db-user";
