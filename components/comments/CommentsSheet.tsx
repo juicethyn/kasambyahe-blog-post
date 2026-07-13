@@ -62,9 +62,19 @@ export default function CommentsSheet({
 		[postId],
 	);
 
-	const handleCommentSubmit = useCallback(async () => {
-		await loadPage(currentPage);
-	}, [currentPage, loadPage]);
+	const handleCommentSubmit = useCallback(
+		(newComment: PostComment) => {
+			if (currentPage === totalPages) {
+				setComments((prev) => [...prev, newComment]);
+			}
+			setCount((prev) => {
+				const next = prev + 1;
+				setTotalPages(Math.ceil(next / 10));
+				return next;
+			});
+		},
+		[currentPage, totalPages],
+	);
 
 	return (
 		<Sheet>

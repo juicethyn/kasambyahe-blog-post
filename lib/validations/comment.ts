@@ -1,5 +1,5 @@
 import { z } from "zod";
-import type { PostComment } from "@/lib/types/comment";
+import type { PostComment } from "../types/comment";
 
 export const addCommentSchema = z.object({
 	postId: z.string().uuid("Invalid post ID"),

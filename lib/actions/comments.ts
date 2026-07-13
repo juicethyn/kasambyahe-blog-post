@@ -54,7 +54,7 @@ export default async function addCommentAction(
 			};
 		}
 
-		await createComment({
+		const newComment = await createComment({
 			postId,
 			authorId: dbUser.id,
 			content,
@@ -67,6 +67,17 @@ export default async function addCommentAction(
 			success: true,
 			message: "Comment added successfully.",
 			errors: {},
+			comment: {
+				id: newComment.id,
+				content: newComment.content,
+				createdAt: newComment.createdAt,
+				author: {
+					id: dbUser.id,
+					displayName: dbUser.displayName,
+					username: dbUser.clerkUsername,
+					imageUrl: dbUser.imageUrl,
+				},
+			},
 		};
 	} catch (error) {
 		console.error(error);

@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import addCommentAction from "@/lib/actions/comments";
+import type { PostComment } from "@/lib/types/comment";
 import type { CommentFormState } from "@/lib/validations/comment";
 import { Button } from "../ui/button";
 import { FieldError } from "../ui/field";
@@ -10,7 +11,7 @@ import { Textarea } from "../ui/textarea";
 
 interface CommentFormProps {
 	postId: string;
-	onCommentSubmit?: () => void;
+	onCommentSubmit?: (comment: PostComment) => void;
 }
 
 const initialState: CommentFormState = {
@@ -38,9 +39,11 @@ export default function CommentForm({
 	const formRef = useRef<HTMLFormElement>(null);
 
 	useEffect(() => {
-		if (state.success && formRef.current && onCommentSubmit) {
+		if (state.success && formRef.current) {
 			formRef.current?.reset();
-			onCommentSubmit();
+			if (state.comment && onCommentSubmit) {
+				onCommentSubmit?.(state.comment);
+			}
 		}
 	}, [state, onCommentSubmit]);
 
