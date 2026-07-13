@@ -2,11 +2,13 @@ import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
-import CommentForm from "@/components/comments/CommentForm";
-import CommentsList from "@/components/comments/CommentsList";
+import DiscussionSection from "@/components/comments/DiscussionSection";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
-import { getCommentsByPostId } from "@/lib/db/queries/comments";
+import {
+	getCommentCountByPostId,
+	getCommentsByPostId,
+} from "@/lib/db/queries/comments";
 import { getPostBySlug } from "@/lib/db/queries/posts";
 import { formatRelativeDate } from "@/lib/utils/format-relative-date";
 
@@ -24,6 +26,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 
 	const dbUser = await getCurrentDbUserOrNull();
 	const comments = await getCommentsByPostId(post.id);
+	const commentCount = await getCommentCountByPostId(post.id);
 
 	return (
 		<section className="lg:mx-36 flex flex-col gap-6">
@@ -78,9 +81,13 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 
 			<BlockNoteRenderer content={post.content} />
 
-			{/* Comments */}
-			<CommentForm postId={post.id} />
-			<CommentsList comments={comments} postAuthorId={post.author.id} />
+			{/* Discussion Section*/}
+			<DiscussionSection
+				postId={post.id}
+				postAuthorId={post.author.id}
+				commentCount={commentCount}
+				comments={comments}
+			/>
 		</section>
 	);
 }

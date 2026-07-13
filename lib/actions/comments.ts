@@ -2,7 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
-import { createComment } from "@/lib/db/queries/comments";
+import {
+	createComment,
+	getCommentCountByPostId,
+	getCommentsByPostId,
+} from "@/lib/db/queries/comments";
 import { getPostById } from "@/lib/db/queries/posts";
 import {
 	addCommentSchema,
@@ -71,5 +75,24 @@ export default async function addCommentAction(
 	return {
 		success: false,
 		message: "An error occurred while adding the comment.",
+	};
+}
+
+export async function getCommentsPageAction(
+	postId: string,
+	page: number,
+	pageSize = 10,
+) {
+	const [comments, totalCount] = await Promise.all([
+		getCommentsByPostId(postId, page, pageSize),
+		getCommentCountByPostId(postId),
+	]);
+
+	return {
+		comments,
+		totalCount,
+		page,
+		pageSize,
+		totalPages: Math.ceil(totalCount / pageSize),
 	};
 }

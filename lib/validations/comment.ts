@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { PostComment } from "@/lib/types/comment";
 
 export const addCommentSchema = z.object({
 	postId: z.string().uuid("Invalid post ID"),
@@ -16,4 +17,5 @@ export type CommentFormState = {
 	success: boolean;
 	message?: string;
 	errors?: Partial<Record<keyof AddCommentFormValues, string>>;
+	comment?: PostComment;
 };

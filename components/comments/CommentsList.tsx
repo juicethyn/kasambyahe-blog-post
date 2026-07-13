@@ -9,9 +9,6 @@ interface CommentProps {
 export default function CommentsList({ comments, postAuthorId }: CommentProps) {
 	return (
 		<div className="space-y-4">
-			<h2 className="text-2xl font-semibold font-merriweather">
-				Comments ({comments.length})
-			</h2>
 			{comments.length === 0 ? (
 				<p className="text-muted-foreground">No comments yet.</p>
 			) : (

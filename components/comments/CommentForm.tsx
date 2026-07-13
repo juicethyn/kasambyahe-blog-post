@@ -10,6 +10,7 @@ import { Textarea } from "../ui/textarea";
 
 interface CommentFormProps {
 	postId: string;
+	onCommentSubmit?: () => void;
 }
 
 const initialState: CommentFormState = {
@@ -28,16 +29,20 @@ function SubmitButton() {
 	);
 }
 
-export default function CommentForm({ postId }: CommentFormProps) {
+export default function CommentForm({
+	postId,
+	onCommentSubmit,
+}: CommentFormProps) {
 	const [state, formAction] = useActionState(addCommentAction, initialState);
 
 	const formRef = useRef<HTMLFormElement>(null);
 
 	useEffect(() => {
-		if (state.success && formRef.current) {
+		if (state.success && formRef.current && onCommentSubmit) {
 			formRef.current.reset();
+			onCommentSubmit();
 		}
-	}, [state.success]);
+	}, [state.success, onCommentSubmit]);
 
 	return (
 		<form action={formAction}>
