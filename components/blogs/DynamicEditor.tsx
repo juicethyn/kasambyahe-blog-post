@@ -7,7 +7,7 @@ export const BlockNoteRenderer = dynamic(() => import("./BlockNoteRenderer"), {
 });
 
 export const BlockNoteEditor = dynamic(
-	() => import("../forms/BlockNoteEditor"),
+	() => import("../posts/BlockNoteEditor"),
 	{
 		ssr: false,
 	},

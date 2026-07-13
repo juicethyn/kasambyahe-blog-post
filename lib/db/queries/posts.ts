@@ -92,6 +92,7 @@ export async function getPostById(postId: string) {
 		.select({
 			id: posts.id,
 			authorId: posts.authorId,
+			slug: posts.slug,
 			coverImageUrl: posts.coverImageUrl,
 			coverImageKey: posts.coverImageKey,
 		})
