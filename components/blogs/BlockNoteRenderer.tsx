@@ -17,8 +17,20 @@ export default function BlockNoteRenderer({ content }: BlockNoteRendererProps) {
 	});
 
 	return (
-		<div className="prose prose-neutral dark:prose-invert max-w-none">
-			<BlockNoteView editor={editor} editable={false} theme="light" />
+		<div className="bn-content prose prose-neutral max-w-none">
+			<BlockNoteView
+				editor={editor}
+				editable={false}
+				theme={{
+					colors: {
+						editor: {
+							background: "#FFF8F0",
+							text: "#000000",
+						},
+					},
+				}}
+				data-my-editor
+			/>
 		</div>
 	);
 }

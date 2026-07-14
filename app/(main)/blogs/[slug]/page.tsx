@@ -1,4 +1,11 @@
-import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
+import {
+	ArrowLeft,
+	Bookmark,
+	Heart,
+	MessageCircle,
+	MoreHorizontal,
+	Share2,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -6,6 +13,15 @@ import { Suspense } from "react";
 import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
 import DiscussionSection from "@/components/comments/DiscussionSection";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Button } from "@/components/ui/button";
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import {
 	getCommentCountByPostId,
@@ -35,23 +51,55 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 
 	return (
 		<Suspense fallback={<Loading />}>
-			<section className="lg:mx-36 flex flex-col gap-6">
-				{dbUser?.id === post.author.id ? (
-					<Link href={`/blogs/${post.slug}/edit`}>Edit post</Link>
-				) : null}
+			<section className="mx-auto flex w-full max-w-5xl flex-col gap-6 px-4">
+				<div className="flex items-center justify-between">
+					<Link href="/" className="flex gap-2">
+						<ArrowLeft />
+						<p>Back to Home</p>
+					</Link>
+
+					{dbUser?.id === post.author.id && (
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button variant="ghost" size="icon">
+									<MoreHorizontal />
+								</Button>
+							</DropdownMenuTrigger>
+
+							<DropdownMenuContent
+								align="end"
+								className="bg-background text-foreground"
+							>
+								<DropdownMenuItem asChild>
+									<Link href={`/blogs/${post.slug}/edit`}>Edit Post</Link>
+								</DropdownMenuItem>
+
+								<DropdownMenuSeparator />
+
+								<DropdownMenuItem className="text-destructive focus:text-destructive">
+									Delete Post
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					)}
+				</div>
+
 				<div className="mx-auto w-full lg:max-w-8xl">
 					<AspectRatio ratio={16 / 9} className="overflow-hidden rounded-xl">
 						<Image
 							src={post.coverImageUrl || "https://avatar.vercel.sh/shadcn1"}
 							alt={post.title}
 							fill
-							className="object-cover grayscale dark:brightness-20"
+							className="object-cover"
 						/>
 					</AspectRatio>
 				</div>
 
-				{/* Title */}
-				<h1 className="text-4xl font-bold font-merriweather">{post.title}</h1>
+				<div className="max-w-4xl">
+					<h1 className="font-merriweather text-2xl lg:text-4xl font-bold wrap-break-word">
+						{post.title}
+					</h1>
+				</div>
 
 				{/* Author Details */}
 				<div>
@@ -86,6 +134,8 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 				</div>
 
 				<BlockNoteRenderer content={post.content} />
+
+				<Separator />
 
 				{/* Discussion Section*/}
 				<Suspense fallback={<div>Loading comments...</div>}>

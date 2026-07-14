@@ -28,7 +28,7 @@ export default function AppShell({
 				<Suspense fallback={<div>Loading...</div>}>
 					<LeftNavBar isOpen={sidebarOpen} />
 				</Suspense>
-				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-3 lg:p-6">
+				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-1 pb-20 lg:p-6">
 					{children}
 				</main>
 				{showRightBar ? <RightBar /> : null}

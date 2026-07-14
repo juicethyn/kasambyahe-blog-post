@@ -40,7 +40,14 @@ export default function BlockNoteEditor({
 				const _blocks = content.document;
 				onChange?.(editor.document as PostContent);
 			}}
-			theme="light"
+			theme={{
+				colors: {
+					editor: {
+						background: "#FFF8F0",
+						text: "#000000",
+					},
+				},
+			}}
 		/>
 	);
 }

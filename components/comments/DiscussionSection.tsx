@@ -16,7 +16,7 @@ export default function DiscussionSection({
 	comments,
 }: DiscussionSectionProps) {
 	return (
-		<section className="space-y-8">
+		<section className="space-y-4">
 			<h2 className="font-merriweather text-2xl font-semibold">
 				Discussion ({commentCount})
 			</h2>
