@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth, useClerk } from "@clerk/nextjs";
+import { UserAvatar, useAuth, useClerk } from "@clerk/nextjs";
 import { usePathname } from "next/dist/client/components/navigation";
 import Link from "next/link";
 import { NAV_LINKS } from "@/constants/navigations";
@@ -28,15 +28,15 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 			<div className="px-4 py-6 flex h-full flex-col gap-2">
 				{NAV_LINKS.map((link) => {
 					const isActive = pathname === link.href;
-					const isProtected = link.requiresAuth && !userId;
 					const isSignedIn = Boolean(userId);
+					const isProtected = link.requiresAuth && !isSignedIn;
 
 					const baseClass = cn(
 						"flex items-center gap-2 rounded-md p-2 text-left transition-colors cursor-pointer",
 						isActive ? "text-primary" : "text-foreground hover:text-primary",
 					);
 
-					if (isProtected && !isSignedIn) {
+					if (isProtected) {
 						return (
 							<button
 								key={link.id}
@@ -47,6 +47,17 @@ export default function LeftNavBar({ isOpen }: LeftNavBarProps) {
 								<link.icon className="size-6" strokeWidth={1.5} />
 								<span className="ml-2">{link.label}</span>
 							</button>
+						);
+					}
+
+					if (link.href === "/profile" && isSignedIn) {
+						return (
+							<Link key={link.id} href={link.href} className={baseClass}>
+								<div className="size-6">
+									<UserAvatar />
+								</div>
+								<span className="ml-2">{link.label}</span>
+							</Link>
 						);
 					}
 

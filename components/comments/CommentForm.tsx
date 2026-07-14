@@ -1,5 +1,6 @@
 "use client";
 
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { useActionState, useEffect, useRef } from "react";
 import { useFormStatus } from "react-dom";
 import addCommentAction from "@/lib/actions/comments";
@@ -24,8 +25,8 @@ function SubmitButton() {
 	const { pending } = useFormStatus();
 
 	return (
-		<Button type="submit" disabled={pending}>
-			{pending ? "Posting..." : "Post Comment"}
+		<Button variant="default" size="sm" type="submit" disabled={pending}>
+			{pending ? "Posting..." : "Post"}
 		</Button>
 	);
 }
@@ -38,6 +39,8 @@ export default function CommentForm({
 
 	const formRef = useRef<HTMLFormElement>(null);
 
+	const isSignedIn = useUser().isSignedIn;
+
 	useEffect(() => {
 		if (state.success && formRef.current) {
 			formRef.current?.reset();
@@ -47,14 +50,42 @@ export default function CommentForm({
 		}
 	}, [state, onCommentSubmit]);
 
+	if (!isSignedIn) {
+		return (
+			<div className="flex flex-col items-center gap-3 bg-background p-6 text-center">
+				<p className="text-sm text-muted-foreground">
+					Sign in to join the discussion.
+				</p>
+				<SignInButton mode="modal">
+					<Button variant="default" size="sm">
+						Sign in
+					</Button>
+				</SignInButton>
+			</div>
+		);
+	}
+
 	return (
-		<form action={formAction} ref={formRef}>
+		<form action={formAction} ref={formRef} className="bg-background">
 			<input type="hidden" name="postId" value={postId} />
 
-			<Textarea name="content" placeholder="Share your thoughts..." />
+			<div className="p-3 bg-background transition-colors focus-within:border-foreground/40">
+				<Textarea
+					name="content"
+					placeholder="What's on your mind?"
+					aria-label="Write a comment"
+					className="min-h-0 resize-none border-none bg-transparent p-2 shadow-none focus-visible:ring-0"
+				/>
+
+				<div className="mt-3 flex items-center justify-between gap-3">
+					<p className="hidden text-xs text-muted-foreground sm:block">
+						Be kind to fellow travelers.
+					</p>
+					<SubmitButton />
+				</div>
+			</div>
 
 			<FieldError>{state.errors?.content?.[0]}</FieldError>
-			<SubmitButton />
 		</form>
 	);
 }

@@ -36,12 +36,12 @@ export default function PostCard({ post }: PostCardProps) {
 					/>
 				</div>
 
-				<CardHeader className="flex-1 gap-4">
+				<CardHeader className="flex-1 gap-4 wrap-break-word">
 					<div className="flex flex-col gap-2">
-						<CardTitle className="line-clamp-2 text-2xl font-bold">
+						<CardTitle className="line-clamp-2 text-2xl font-bold wrap-anywhere">
 							{post.title}
 						</CardTitle>
-						<CardDescription className="line-clamp-2 text-base text-foreground">
+						<CardDescription className="line-clamp-2 text-base text-foreground wrap-anywhere">
 							{truncateText(post.excerpt, 100)}
 						</CardDescription>
 					</div>

@@ -86,18 +86,19 @@ export default function CommentsSheet({
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button variant="ghost">View all {count} discussions →</Button>
+				<Button variant="ghost" className="text-center">
+					View all {count} discussions →
+				</Button>
 			</SheetTrigger>
 
-			<SheetContent className="flex h-full flex-col sm:max-w-2xl">
-				<SheetHeader>
+			<SheetContent className="flex h-full flex-col sm:max-w-2xl bg-background">
+				<SheetHeader className="pt-6">
 					<SheetTitle>Discussion ({count})</SheetTitle>
-
 					<SheetDescription>Read and join the discussion.</SheetDescription>
 				</SheetHeader>
 
-				<div className="mt-6 flex h-full flex-col">
-					<ScrollArea className="h-[calc(100vh-320px)]">
+				<div className="mt-6 flex flex-1 flex-col min-h-0 bg-background">
+					<ScrollArea className="flex-1 min-h-0">
 						{isLoading ? (
 							<div className="text-center py-10">Loading comments...</div>
 						) : (
@@ -105,10 +106,10 @@ export default function CommentsSheet({
 						)}
 					</ScrollArea>
 
-					<Separator className="my-6" />
+					<Separator className="shrink-0" />
 					<CommentForm postId={postId} onCommentSubmit={handleCommentSubmit} />
 
-					<Pagination>
+					<Pagination className="shrink-0">
 						<PaginationContent>
 							<PaginationPrevious
 								onClick={() => {

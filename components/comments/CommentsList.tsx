@@ -17,11 +17,13 @@ export default function CommentsList({ comments, postAuthorId }: CommentProps) {
 						const _isPostAuthor = comment.author.id === postAuthorId;
 
 						return (
-							<CommentItem
-								key={comment.id}
-								comment={comment}
-								postAuthorId={postAuthorId}
-							/>
+							<div className="p-2" key={comment.id}>
+								<CommentItem
+									key={comment.id}
+									comment={comment}
+									postAuthorId={postAuthorId}
+								/>
+							</div>
 						);
 					})}
 				</div>
