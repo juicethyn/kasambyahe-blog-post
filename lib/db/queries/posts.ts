@@ -1,3 +1,5 @@
+"use cache";
+
 import { desc, eq } from "drizzle-orm";
 import type { FeedPost } from "@/lib/types/post";
 import { db } from "../index";
