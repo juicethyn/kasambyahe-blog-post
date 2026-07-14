@@ -16,7 +16,7 @@ interface CreateUserParams {
 	clerkUsername: string;
 	displayName: string;
 	imageUrl?: string | null;
-	bio?: string;
+	bio?: string | null;
 	role?: "user" | "admin";
 }
 
@@ -33,4 +33,23 @@ export async function createUser(input: CreateUserParams) {
 		})
 		.returning();
 	return newUser;
+}
+
+export async function updateUserByClerkUserId(input: CreateUserParams) {
+	const [user] = await db
+		.update(users)
+		.set({
+			clerkUsername: input.clerkUsername,
+			displayName: input.displayName,
+			imageUrl: input.imageUrl,
+			bio: input.bio,
+			role: input.role,
+		})
+		.where(eq(users.clerkUserId, input.clerkUserId))
+		.returning();
+	return user;
+}
+
+export async function deleteUserByClerkUserId(clerkUserId: string) {
+	await db.delete(users).where(eq(users.clerkUserId, clerkUserId));
 }

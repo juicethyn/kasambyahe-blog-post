@@ -1,15 +1,12 @@
-import { syncUser } from "@/lib/auth/sync-user";
+import { currentUser } from "@clerk/nextjs/server";
+import { getUserByClerkUserId } from "@/lib/db/queries/users";
 
 export async function getCurrentDbUserOrNull() {
-	return await syncUser();
-}
+	const clerkUser = await currentUser();
 
-export async function getCurrentDbUser() {
-	const user = await getCurrentDbUserOrNull();
-
-	if (!user) {
+	if (!clerkUser) {
 		return null;
 	}
 
-	return user;
+	return await getUserByClerkUserId(clerkUser.id);
 }

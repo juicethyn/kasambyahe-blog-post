@@ -52,9 +52,9 @@ export default function PostCard({ post }: PostCardProps) {
 						<Image
 							src={post.author.imageUrl || "https://avatar.vercel.sh/shadcn1"}
 							alt={post.author.displayName}
-							className="rounded-full object-cover"
 							width={50}
 							height={50}
+							className="h-10 w-10 rounded-full object-cover"
 						/>
 						<div className="flex flex-col">
 							<p className="font-bold font-merriweather text-base">
