@@ -1,11 +1,12 @@
 import { ImagePlus } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useState } from "react";
 import CoverImageUpload from "./CoverImageUpload";
 
 interface CoverImageToggleProps {
 	coverImage?: { url: string; key: string } | null;
 	setCoverImage: (payload: { url: string; key: string } | null) => void;
+	initialCoverKey?: string | null;
 }
 
 export default function CoverImageToggle({
@@ -27,20 +28,6 @@ export default function CoverImageToggle({
 					<ImagePlus className="size-4" />
 					{showCoverImageUpload ? "Hide cover image" : "Add cover image"}
 				</button>
-
-				<AnimatePresence>
-					{showCoverImageUpload && (
-						<motion.button
-							type="button"
-							onClick={() => setShowCoverImageUpload(false)}
-							initial={{ opacity: 0, scale: 0.8 }}
-							animate={{ opacity: 1, scale: 1 }}
-							exit={{ opacity: 0, scale: 0.8 }}
-							transition={{ duration: 0.15 }}
-							className="rounded-md p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-						></motion.button>
-					)}
-				</AnimatePresence>
 			</div>
 
 			<motion.div
@@ -53,10 +40,7 @@ export default function CoverImageToggle({
 				className="overflow-hidden"
 			>
 				<div className="pt-2">
-					<CoverImageUpload
-						value={coverImage?.url ?? ""}
-						onChange={setCoverImage}
-					/>
+					<CoverImageUpload value={coverImage} onChange={setCoverImage} />
 				</div>
 			</motion.div>
 		</>

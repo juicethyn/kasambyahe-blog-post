@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/dist/client/components/navigation";
 import { useActionState, useMemo, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/button";
@@ -33,6 +34,22 @@ function SubmitButton({ mode }: SubmitButtonProps) {
 			className="bg-muted-foreground hover:bg-secondary-foreground"
 		>
 			{pending ? pendingLabel : label}
+		</Button>
+	);
+}
+
+function CancelButton() {
+	const router = useRouter();
+	const { pending } = useFormStatus();
+
+	return (
+		<Button
+			type="button"
+			variant="outline"
+			disabled={pending}
+			onClick={() => router.back()}
+		>
+			Cancel
 		</Button>
 	);
 }
@@ -105,6 +122,7 @@ export default function PostEditorForm({
 			<div className="p-4 md:p-6">
 				{/* Actions */}
 				<div className="flex items-center justify-end gap-3 pt-4">
+					<CancelButton />
 					<SubmitButton mode={mode} />
 				</div>
 				<br />

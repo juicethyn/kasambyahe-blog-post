@@ -4,10 +4,11 @@ import { Loader2, Upload, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { deleteUploadthingFileAction } from "@/lib/actions/uploadthing";
 import { useUploadThing } from "@/lib/uploadthing";
 
 interface CoverImageUploadProps {
-	value?: string;
+	value?: { url: string; key: string } | null;
 	onChange: (payload: { url: string; key: string } | null) => void;
 }
 
@@ -16,17 +17,31 @@ export default function CoverImageUpload({
 	onChange,
 }: CoverImageUploadProps) {
 	const inputRef = useRef<HTMLInputElement | null>(null);
-	const [previewUrl, setPreviewUrl] = useState(value ?? "");
+	const [previewUrl, setPreviewUrl] = useState(value?.url ?? "");
+	const [previewKey, setPreviewKey] = useState(value?.key ?? "");
 	const [isUploading, setIsUploading] = useState(false);
+
+	// When the user uploads a new image, we delete the previous one to avoid orphaned files.
+	const originalKeyRef = useRef(value?.key ?? "");
+
+	function cleanupIfOrphan(key: string) {
+		if (key && key !== originalKeyRef.current) {
+			deleteUploadthingFileAction(key);
+		}
+	}
 
 	const { startUpload } = useUploadThing("postCoverImage", {
 		onClientUploadComplete: (res) => {
 			const uploaded = res?.[0];
 			if (!uploaded) return;
 
-			setPreviewUrl(uploaded.url);
+			// Cleans up the previous previewKey, which is the last uploaded file's key.
+			cleanupIfOrphan(previewKey);
+
+			setPreviewUrl(uploaded.ufsUrl);
+			setPreviewKey(uploaded.key);
 			onChange({
-				url: uploaded.url,
+				url: uploaded.ufsUrl,
 				key: uploaded.key,
 			});
 			setIsUploading(false);
@@ -52,7 +67,10 @@ export default function CoverImageUpload({
 	}
 
 	function handleRemove() {
+		cleanupIfOrphan(previewKey);
+
 		setPreviewUrl("");
+		setPreviewKey("");
 		onChange(null);
 
 		if (inputRef.current) {
@@ -62,28 +80,28 @@ export default function CoverImageUpload({
 
 	return (
 		<div className="space-y-3">
-			<div className="rounded-2xl p-4 bg-background">
+			<div className="rounded-2xl p-3 sm:p-4 bg-background">
 				{previewUrl ? (
 					<div className="space-y-3">
-						<div className="flex items-center justify-between">
-							{previewUrl ? (
-								<Button
-									type="button"
-									variant="ghost"
-									size="sm"
-									onClick={handleRemove}
-									className="text-destructive hover:bg-destructive/10"
-								>
-									<X className="mr-2 size-4" />
-									Remove
-								</Button>
-							) : null}
+						<div className="flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
+							<Button
+								type="button"
+								variant="ghost"
+								size="sm"
+								onClick={handleRemove}
+								className="text-destructive hover:bg-destructive/10"
+							>
+								<X className="mr-2 size-4" />
+								Remove
+							</Button>
 
 							<Button
 								type="button"
 								variant="secondary"
+								size="sm"
 								onClick={() => inputRef.current?.click()}
 								disabled={isUploading}
+								className="w-full sm:w-auto"
 							>
 								{isUploading ? (
 									<>
@@ -104,12 +122,13 @@ export default function CoverImageUpload({
 								src={previewUrl}
 								alt="Cover preview"
 								fill
+								sizes="(max-width: 768px) 100vw, 768px"
 								className="object-cover"
 							/>
 						</div>
 					</div>
 				) : (
-					<div className="flex flex-col items-center justify-center gap-3 bg-background rounded-xl border border-dashed px-6 py-10 text-center">
+					<div className="flex flex-col items-center justify-center gap-3 bg-background rounded-xl border border-dashed px-4 py-8 text-center sm:px-6 sm:py-10">
 						<Upload className="size-8 text-muted-foreground" />
 						<div className="space-y-1">
 							<p className="text-sm font-medium">Upload a cover image</p>
