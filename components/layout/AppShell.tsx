@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import BottomNavBar from "./BottomNavBar";
 import LeftNavBar from "./LeftNavBar";
 import RightBar from "./RightBar";
@@ -25,13 +25,17 @@ export default function AppShell({
 		<div className="flex h-screen flex-col">
 			<TopNavbar onToggleSidebar={toggleSidebar} />
 			<div className="flex flex-1 overflow-hidden">
-				<LeftNavBar isOpen={sidebarOpen} />
-				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-3 lg:p-6">
+				<Suspense fallback={<div>Loading...</div>}>
+					<LeftNavBar isOpen={sidebarOpen} />
+				</Suspense>
+				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-1 pb-20 lg:p-6">
 					{children}
 				</main>
 				{showRightBar ? <RightBar /> : null}
 			</div>
-			<BottomNavBar />
+			<Suspense fallback={<div>Loading...</div>}>
+				<BottomNavBar />
+			</Suspense>
 		</div>
 	);
 }

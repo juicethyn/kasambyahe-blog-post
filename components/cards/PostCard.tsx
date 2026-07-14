@@ -14,6 +14,7 @@ import { formatRelativeDate } from "@/lib/utils/format-relative-date";
 interface PostCardProps {
 	post: FeedPost;
 }
+
 export default function PostCard({ post }: PostCardProps) {
 	function truncateText(text: string, maxLength = 100): string {
 		if (text.length <= maxLength) {
@@ -21,33 +22,37 @@ export default function PostCard({ post }: PostCardProps) {
 		}
 		return `${text.slice(0, maxLength)}...`;
 	}
-
 	return (
 		<Link href={`/blogs/${post.slug}`}>
-			<Card className="w-full overflow-hidden bg-background text-foreground pt-0">
-				<div className="relative h-56 w-full">
+			<Card className="flex h-full w-full flex-col overflow-hidden bg-background text-foreground pt-0">
+				{/* Fixed-height, always-cropped cover image */}
+				<div className="relative h-56 w-full shrink-0">
 					<Image
 						src={post.coverImageUrl || "https://avatar.vercel.sh/shadcn1"}
-						alt="KasamByahe cover"
-						className="h-full w-full object-cover grayscale "
-						width={500}
-						height={300}
+						alt={post.title}
+						className="object-cover"
+						fill
+						sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
 					/>
 				</div>
 
-				<CardHeader>
-					<CardTitle className="text-2xl font-bold">{post.title}</CardTitle>
-					<CardDescription className="text-base text-foreground">
-						{truncateText(post.excerpt, 100)}
-					</CardDescription>
-					<hr className="mt-4" />
+				<CardHeader className="flex-1 gap-4">
+					<div className="flex flex-col gap-2">
+						<CardTitle className="line-clamp-2 text-2xl font-bold">
+							{post.title}
+						</CardTitle>
+						<CardDescription className="line-clamp-2 text-base text-foreground">
+							{truncateText(post.excerpt, 100)}
+						</CardDescription>
+					</div>
 				</CardHeader>
-				<CardFooter className="flex justify-between items-center">
+				<hr />
+				<CardFooter className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<Image
 							src={post.author.imageUrl || "https://avatar.vercel.sh/shadcn1"}
-							alt="KasamByahe cover"
-							className="max-w-xs lg:max-w-lg rounded-full object-cover"
+							alt={post.author.displayName}
+							className="rounded-full object-cover"
 							width={50}
 							height={50}
 						/>

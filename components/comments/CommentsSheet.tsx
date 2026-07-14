@@ -64,9 +64,16 @@ export default function CommentsSheet({
 
 	const handleCommentSubmit = useCallback(
 		(newComment: PostComment) => {
+			console.log("Adding comment:", newComment.id);
 			if (currentPage === totalPages) {
-				setComments((prev) => [...prev, newComment]);
+				setComments((prev) => {
+					if (prev.some((comment) => comment.id === newComment.id)) {
+						return prev;
+					}
+					return [...prev, newComment];
+				});
 			}
+
 			setCount((prev) => {
 				const next = prev + 1;
 				setTotalPages(Math.ceil(next / 10));
