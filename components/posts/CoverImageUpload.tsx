@@ -62,36 +62,26 @@ export default function CoverImageUpload({
 
 	return (
 		<div className="space-y-3">
-			<div className="flex items-center justify-between">
-				{previewUrl ? (
-					<Button
-						type="button"
-						variant="ghost"
-						size="sm"
-						onClick={handleRemove}
-					>
-						<X className="mr-2 size-4" />
-						Remove
-					</Button>
-				) : null}
-			</div>
-
-			<div className="rounded-2xl border bg-card p-4">
+			<div className="rounded-2xl p-4 bg-background">
 				{previewUrl ? (
 					<div className="space-y-3">
-						<div className="relative aspect-video w-full overflow-hidden rounded-xl border">
-							<Image
-								src={previewUrl}
-								alt="Cover preview"
-								fill
-								className="object-cover"
-							/>
-						</div>
+						<div className="flex items-center justify-between">
+							{previewUrl ? (
+								<Button
+									type="button"
+									variant="ghost"
+									size="sm"
+									onClick={handleRemove}
+									className="text-destructive hover:bg-destructive/10"
+								>
+									<X className="mr-2 size-4" />
+									Remove
+								</Button>
+							) : null}
 
-						<div className="flex justify-end">
 							<Button
 								type="button"
-								variant="outline"
+								variant="secondary"
 								onClick={() => inputRef.current?.click()}
 								disabled={isUploading}
 							>
@@ -108,9 +98,18 @@ export default function CoverImageUpload({
 								)}
 							</Button>
 						</div>
+
+						<div className="relative aspect-video w-full overflow-hidden rounded-xl border">
+							<Image
+								src={previewUrl}
+								alt="Cover preview"
+								fill
+								className="object-cover"
+							/>
+						</div>
 					</div>
 				) : (
-					<div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed px-6 py-10 text-center">
+					<div className="flex flex-col items-center justify-center gap-3 bg-background rounded-xl border border-dashed px-6 py-10 text-center">
 						<Upload className="size-8 text-muted-foreground" />
 						<div className="space-y-1">
 							<p className="text-sm font-medium">Upload a cover image</p>
@@ -121,7 +120,7 @@ export default function CoverImageUpload({
 
 						<Button
 							type="button"
-							variant="outline"
+							variant="secondary"
 							onClick={() => inputRef.current?.click()}
 							disabled={isUploading}
 						>

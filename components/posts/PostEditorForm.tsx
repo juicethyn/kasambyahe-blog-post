@@ -9,7 +9,7 @@ import { createPostAction, updatePostAction } from "@/lib/actions/posts";
 import type { PostContent, PostFormValues } from "@/lib/types/post";
 import type { PostFormState } from "@/lib/validations/post";
 import { BlockNoteEditor } from "../blogs/DynamicEditor";
-import CoverImageUpload from "./CoverImageUpload";
+import CoverImageToggle from "./CoverImageToggle";
 
 const initialState: PostFormState = {
 	success: false,
@@ -23,11 +23,15 @@ interface SubmitButtonProps {
 function SubmitButton({ mode }: SubmitButtonProps) {
 	const { pending } = useFormStatus();
 
-	const label = mode === "create" ? "Create Post" : "Save Changes";
-	const pendingLabel = mode === "create" ? "Creating..." : "Saving...";
+	const label = mode === "create" ? "Publish" : "Save Changes";
+	const pendingLabel = mode === "create" ? "Publishing..." : "Saving...";
 
 	return (
-		<Button type="submit" disabled={pending}>
+		<Button
+			type="submit"
+			disabled={pending}
+			className="bg-muted-foreground hover:bg-secondary-foreground"
+		>
 			{pending ? pendingLabel : label}
 		</Button>
 	);
@@ -97,81 +101,61 @@ export default function PostEditorForm({
 				<input type="hidden" name="postId" value={postId} />
 			) : null}
 
-			{/* Header */}
-			<div className="space-y-2">
-				<h1 className="text-3xl font-bold tracking-tight">Write a post</h1>
-				<p className="text-sm text-muted-foreground">
-					Share a route guide, commute tip, or travel story for KasamByahe.
-				</p>
-			</div>
-
 			{/* Main form container */}
-			<div className="rounded-2xl border bg-card p-4 shadow-sm md:p-6">
+			<div className="p-4 md:p-6">
+				{/* Actions */}
+				<div className="flex items-center justify-end gap-3 pt-4">
+					<SubmitButton mode={mode} />
+				</div>
+				<br />
 				<div className="flex flex-col gap-6">
+					{/* Cover Image */}
+					<CoverImageToggle
+						coverImage={coverImage}
+						setCoverImage={setCoverImage}
+					/>
+
+					<input
+						type="hidden"
+						name="coverImageUrl"
+						value={coverImage?.url ?? ""}
+					/>
+					<input
+						type="hidden"
+						name="coverImageKey"
+						value={coverImage?.key ?? ""}
+					/>
+
+					<FieldError error={state.errors?.coverImageUrl?.[0]} />
+					<FieldError error={state.errors?.coverImageKey?.[0]} />
+
 					{/* Title */}
 					<div className="space-y-2">
-						<label htmlFor="title" className="text-sm font-medium">
-							Title
-						</label>
 						<Input
 							id="title"
 							name="title"
-							placeholder="e.g. My first ride to Tagaytay at 5AM"
+							placeholder="Title"
 							defaultValue={defaults.title}
+							className="h-auto border-none bg-transparent px-0 py-2 text-3xl font-bold font-merriweather shadow-none focus-visible:ring-0 lg:text-5xl"
 						/>
 						<FieldError error={state.errors?.title?.[0]} />
 					</div>
 
 					{/* Excerpt */}
 					<div className="space-y-2">
-						<label htmlFor="excerpt" className="text-sm font-medium">
-							Excerpt
-						</label>
 						<Textarea
 							id="excerpt"
 							name="excerpt"
 							defaultValue={defaults.excerpt}
 							placeholder="Write a short preview for the feed..."
-							className="min-h-28 resize-none"
+							className="h-auto border-none bg-transparent px-0 py-2 text-xl font-bold font-merriweather shadow-none focus-visible:ring-0 lg:text-2xl"
 						/>
-						<p className="text-xs text-muted-foreground">
-							This is the short preview shown on the feed card.
-						</p>
 						<FieldError error={state.errors?.excerpt?.[0]} />
-					</div>
-
-					{/* Cover image URL */}
-					<div className="space-y-2">
-						<CoverImageUpload
-							value={coverImage?.url ?? ""}
-							onChange={setCoverImage}
-						/>
-
-						<input
-							type="hidden"
-							name="coverImageUrl"
-							value={coverImage?.url ?? ""}
-						/>
-						<input
-							type="hidden"
-							name="coverImageKey"
-							value={coverImage?.key ?? ""}
-						/>
-
-						<FieldError error={state.errors?.coverImageUrl?.[0]} />
-						<FieldError error={state.errors?.coverImageKey?.[0]} />
 					</div>
 
 					{/* Editor */}
 					<div className="space-y-3">
-						<div className="space-y-1">
-							<p className="text-xs text-muted-foreground">
-								Write the main body of your route guide, travel note, or commute
-								experience.
-							</p>
-						</div>
-
-						<div className="overflow-hidden rounded-2xl border bg-background">
+						<div className="overflow-hidden bg-background">
 							<BlockNoteEditor
 								initialContent={defaults.content}
 								onChange={setContent}
@@ -192,11 +176,6 @@ export default function PostEditorForm({
 							<p className="text-sm text-destructive">{state.message}</p>
 						</div>
 					) : null}
-
-					{/* Actions */}
-					<div className="flex items-center justify-end gap-3 border-t pt-4">
-						<SubmitButton mode={mode} />
-					</div>
 				</div>
 			</div>
 		</form>

@@ -48,7 +48,7 @@ export default function CommentForm({
 				onCommentSubmit?.(state.comment);
 			}
 		}
-	}, [state, onCommentSubmit]);
+	}, [state.success, state.comment, onCommentSubmit]);
 
 	if (!isSignedIn) {
 		return (

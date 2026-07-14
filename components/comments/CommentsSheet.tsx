@@ -65,6 +65,9 @@ export default function CommentsSheet({
 	const handleCommentSubmit = useCallback(
 		(newComment: PostComment) => {
 			console.log("Adding comment:", newComment.id);
+			console.count("handleCommentSubmit");
+			console.log("Received in CommentsSheet", newComment.id);
+
 			if (currentPage === totalPages) {
 				setComments((prev) => {
 					if (prev.some((comment) => comment.id === newComment.id)) {
