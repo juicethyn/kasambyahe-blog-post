@@ -2,7 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import PostEditorForm from "@/components/posts/PostEditorForm";
 import { Button } from "@/components/ui/button";
 import { deletePostAction } from "@/lib/actions/posts";
-import { getCurrentDbUser } from "@/lib/auth/get-current-db-user";
+import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import { getPostBySlug } from "@/lib/db/queries/posts";
 
 interface EditPostPageProps {
@@ -20,7 +20,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 		notFound();
 	}
 
-	const dbUser = await getCurrentDbUser();
+	const dbUser = await getCurrentDbUserOrNull();
 
 	if (!dbUser || dbUser.id !== post.author.id) {
 		redirect(`/blogs/${slug}`);

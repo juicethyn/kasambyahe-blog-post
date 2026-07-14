@@ -14,7 +14,7 @@ import {
 	type PostFormState,
 	updatePostSchema,
 } from "@/lib/validations/post";
-import { getCurrentDbUser } from "../auth/get-current-db-user";
+import { getCurrentDbUserOrNull } from "../auth/get-current-db-user";
 import { utapi } from "../uploadthing-server";
 
 export async function createPostAction(
@@ -139,7 +139,7 @@ export async function updatePostAction(
 
 	const data = validatedFields.data;
 
-	const dbUser = await getCurrentDbUser();
+	const dbUser = await getCurrentDbUserOrNull();
 
 	if (!dbUser) {
 		return {
@@ -205,12 +205,6 @@ export async function updatePostAction(
 	revalidatePath(`/blogs/${existingPost.slug}/edit`);
 
 	redirect(`/blogs/${existingPost.slug}`);
-
-	return {
-		success: true,
-		message: "Post updated successfully.",
-		errors: {},
-	};
 }
 
 export async function deletePostAction(formData: FormData) {
@@ -224,7 +218,7 @@ export async function deletePostAction(formData: FormData) {
 
 	const { postId } = validatedFields.data;
 
-	const dbUser = await getCurrentDbUser();
+	const dbUser = await getCurrentDbUserOrNull();
 
 	const [existingPost] = await db
 		.select({

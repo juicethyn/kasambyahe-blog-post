@@ -109,7 +109,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 							<Image
 								src={post.author.imageUrl || "https://avatar.vercel.sh/shadcn1"}
 								alt={post.author.displayName}
-								className="max-w-xs lg:max-w-lg rounded-full object-cover"
+								className="max-w-xs lg:max-w-lg h-10 w-10 rounded-full object-cover"
 								width={50}
 								height={50}
 							/>
