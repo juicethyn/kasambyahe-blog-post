@@ -1,6 +1,13 @@
+import { Suspense } from "react";
 import PostGrid from "@/components/PostGrid";
+import PostGridControls from "@/components/PostGridControls";
+import PostCardSkeleton from "@/components/skeletons/PostCardSkeleton";
 
-export default async function Home() {
+interface HomeProps {
+	searchParams: Promise<{ sort?: string; view?: string }>;
+}
+
+export default async function Home({ searchParams }: HomeProps) {
 	return (
 		<div>
 			{/* Header Message */}
@@ -14,19 +21,14 @@ export default async function Home() {
 					confidence.
 				</h2>
 			</div>
-			{/* Filtering and Sorting Options Turn - Make it a Client Component because it uses Button*/}
-			<div className="flex justify-between items-center mb-4 font-merriweather font-medium">
-				<div className="flex gap-4">
-					<p>Latest</p>
-					<p>Popular</p>
-					<p>Old</p>
-				</div>
-				<div>
-					<p>Filtering Here</p>
-				</div>
-			</div>
 
-			<PostGrid />
+			<Suspense fallback={<div>Loading...</div>}>
+				<PostGridControls />
+			</Suspense>
+
+			<Suspense fallback={<PostCardSkeleton />}>
+				<PostGrid searchParams={searchParams} />
+			</Suspense>
 		</div>
 	);
 }
