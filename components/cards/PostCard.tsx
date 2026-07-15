@@ -1,4 +1,4 @@
-import { Bookmark, Heart, MessageCircle, Share2 } from "lucide-react";
+import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import type { FeedPost } from "@/lib/types/post";
 import { formatRelativeDate } from "@/lib/utils/format-relative-date";
+import PostLikeButton from "../buttons/PostLikeButton";
 
 interface PostCardProps {
 	post: FeedPost;
@@ -47,6 +48,7 @@ export default function PostCard({ post }: PostCardProps) {
 					</div>
 				</CardHeader>
 				<hr />
+
 				<CardFooter className="flex items-center justify-between">
 					<div className="flex items-center gap-3">
 						<Image
@@ -65,11 +67,13 @@ export default function PostCard({ post }: PostCardProps) {
 							</p>
 						</div>
 					</div>
-					<div className="flex gap-6 text-sm text-muted-foreground">
-						<Heart className="size-6" />
+					<div className="flex items-center justify-center gap-3 lg:gap-6 text-sm text-muted-foreground">
+						<PostLikeButton
+							postId={post.id}
+							liked={post.likedByCurrentUser}
+							likeCount={post.likesCount}
+						/>
 						<MessageCircle className="size-6" />
-						<Bookmark className="size-6" />
-						<Share2 className="size-6" />
 					</div>
 				</CardFooter>
 			</Card>

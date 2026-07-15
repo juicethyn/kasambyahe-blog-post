@@ -1,4 +1,5 @@
 import type { PostComment } from "@/lib/types/comment";
+import { Button } from "../ui/button";
 import CommentsSheet from "./CommentsSheet";
 import DiscussionPreview from "./DiscussionPreview";
 
@@ -31,6 +32,12 @@ export default function DiscussionSection({
 				postAuthorId={postAuthorId}
 				commentCount={commentCount}
 				initialComments={comments}
+				trigger={
+					<Button variant="ghost" className="text-center">
+						{" "}
+						View all {commentCount} discussions →{" "}
+					</Button>
+				}
 			/>
 		</section>
 	);

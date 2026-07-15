@@ -1,6 +1,8 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import BottomNavBarSkeleton from "../skeletons/BottomNavBarSkeleton";
+import LeftNavBarSkeleton from "../skeletons/LeftNavBarSkeleton";
 import BottomNavBar from "./BottomNavBar";
 import LeftNavBar from "./LeftNavBar";
 import RightBar from "./RightBar";
@@ -25,7 +27,7 @@ export default function AppShell({
 		<div className="flex h-screen flex-col">
 			<TopNavbar onToggleSidebar={toggleSidebar} />
 			<div className="flex flex-1 overflow-hidden">
-				<Suspense fallback={<div>Loading...</div>}>
+				<Suspense fallback={<LeftNavBarSkeleton isOpen={sidebarOpen} />}>
 					<LeftNavBar isOpen={sidebarOpen} />
 				</Suspense>
 				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-3 pb-20 lg:p-6">
@@ -33,7 +35,7 @@ export default function AppShell({
 				</main>
 				{showRightBar ? <RightBar /> : null}
 			</div>
-			<Suspense fallback={<div>Loading...</div>}>
+			<Suspense fallback={<BottomNavBarSkeleton />}>
 				<BottomNavBar />
 			</Suspense>
 		</div>

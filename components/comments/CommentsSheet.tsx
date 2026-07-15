@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/sheet";
 import { getCommentsPageAction } from "@/lib/actions/comments";
 import type { PostComment } from "@/lib/types/comment";
-import { Button } from "../ui/button";
 import {
 	Pagination,
 	PaginationContent,
@@ -29,6 +28,8 @@ interface CommentsSheetProps {
 	postAuthorId: string;
 	commentCount: number;
 	initialComments: PostComment[];
+	trigger?: React.ReactNode;
+	defaultOpen?: boolean;
 }
 
 export default function CommentsSheet({
@@ -36,12 +37,15 @@ export default function CommentsSheet({
 	postAuthorId,
 	commentCount,
 	initialComments,
+	trigger,
+	defaultOpen,
 }: CommentsSheetProps) {
 	const [comments, setComments] = useState<PostComment[]>(initialComments);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(Math.ceil(commentCount / 10));
 	const [isLoading, setIsLoading] = useState(false);
 	const [count, setCount] = useState(commentCount);
+	const [open, setOpen] = useState(defaultOpen ?? false);
 
 	const loadPage = useCallback(
 		async (page: number) => {
@@ -87,12 +91,8 @@ export default function CommentsSheet({
 	);
 
 	return (
-		<Sheet>
-			<SheetTrigger asChild>
-				<Button variant="ghost" className="text-center">
-					View all {count} discussions →
-				</Button>
-			</SheetTrigger>
+		<Sheet open={open} onOpenChange={setOpen}>
+			{trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
 
 			<SheetContent className="flex h-full flex-col sm:max-w-2xl bg-background">
 				<SheetHeader className="pt-6">

@@ -14,6 +14,8 @@ export interface FeedPost {
 		displayName: string;
 		imageUrl: string | null;
 	};
+	likesCount: number;
+	likedByCurrentUser: boolean;
 }
 
 export interface PostFormValues {

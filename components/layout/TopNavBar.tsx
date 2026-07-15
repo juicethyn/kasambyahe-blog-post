@@ -35,10 +35,14 @@ export default function TopNavBar({ onToggleSidebar }: TopNavBarProps) {
 				</Link>
 			</div>
 
-			<div className="flex justify-center items-center gap-4">
+			<div className="flex justify-center items-center gap-3">
 				<Show when="signed-out">
 					<SignInButton mode="modal">
-						<Button variant="outline" size="sm">
+						<Button
+							variant="default"
+							size="sm"
+							className="bg-background text-accent-foreground border border-accent-foreground hover:bg-accent-foreground/80 hover:text-background"
+						>
 							Sign in
 						</Button>
 					</SignInButton>
