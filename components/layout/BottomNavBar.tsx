@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth, useClerk } from "@clerk/nextjs";
+import { UserAvatar, useAuth, useClerk } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { NAV_LINKS } from "@/constants/navigations";
@@ -16,10 +16,10 @@ export default function MobileBottomNav() {
 			<div className="grid h-16 grid-cols-4">
 				{NAV_LINKS.slice(0, 4).map((link) => {
 					const isActive = pathname === link.href;
-					const isProtected = link.requiresAuth && !userId;
 					const isSignedIn = Boolean(userId);
+					const isProtected = link.requiresAuth && !isSignedIn;
 
-					if (isProtected && !isSignedIn) {
+					if (isProtected) {
 						return (
 							<button
 								key={link.id}
@@ -35,6 +35,26 @@ export default function MobileBottomNav() {
 								<link.icon className="size-5" />
 								<span>{link.label}</span>
 							</button>
+						);
+					}
+
+					if (link.href === "/profile" && isSignedIn) {
+						return (
+							<Link
+								key={link.id}
+								href={link.href}
+								className={cn(
+									"flex flex-col items-center justify-center gap-1 text-xs",
+									isActive
+										? "text-primary"
+										: "text-muted-foreground hover:text-primary",
+								)}
+							>
+								<div className="ml-2">
+									<UserAvatar />
+								</div>
+								<span className="ml-2">{link.label}</span>
+							</Link>
 						);
 					}
 

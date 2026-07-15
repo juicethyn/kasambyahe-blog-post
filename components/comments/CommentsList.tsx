@@ -10,18 +10,20 @@ export default function CommentsList({ comments, postAuthorId }: CommentProps) {
 	return (
 		<div className="space-y-4">
 			{comments.length === 0 ? (
-				<p className="text-muted-foreground">No comments yet.</p>
+				<p className="text-muted-foreground px-3">No comments yet.</p>
 			) : (
-				<div className="space-y-4">
+				<div className="space-y-4 px-3">
 					{comments.map((comment) => {
 						const _isPostAuthor = comment.author.id === postAuthorId;
 
 						return (
-							<CommentItem
-								key={comment.id}
-								comment={comment}
-								postAuthorId={postAuthorId}
-							/>
+							<div key={comment.id}>
+								<CommentItem
+									key={comment.id}
+									comment={comment}
+									postAuthorId={postAuthorId}
+								/>
+							</div>
 						);
 					})}
 				</div>

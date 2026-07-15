@@ -78,7 +78,7 @@ html {
   --destructive: #DC2626;
   /* Warm borders */
   --border: #E5D5C5;
-  --input: #E5D5C5;
+  --input: #FFF8F0;
   --ring: #8B5CF6;
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0.001 106.423);
@@ -114,7 +114,6 @@ html {
 .scrollbar-hide::-webkit-scrollbar {
 	display: none; /* Chrome, Safari, Opera */
 }
-
 
 .bn-content {
   color: var(--foreground);
@@ -245,4 +244,8 @@ html {
 
 .bn-root[data-my-editor] .bn-editor {
   padding-inline: 0 !important;
+}
+
+.bn-editor[data-editor-background] {
+  background: var(--background);
 }

@@ -3,7 +3,6 @@ import {
 	Bookmark,
 	Heart,
 	MessageCircle,
-	MoreHorizontal,
 	Share2,
 } from "lucide-react";
 import Image from "next/image";
@@ -12,15 +11,8 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
 import DiscussionSection from "@/components/comments/DiscussionSection";
+import PostActionsMenu from "@/components/posts/PostActionsMenu";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Button } from "@/components/ui/button";
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuSeparator,
-	DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import {
@@ -59,28 +51,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 					</Link>
 
 					{dbUser?.id === post.author.id && (
-						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
-								<Button variant="ghost" size="icon">
-									<MoreHorizontal />
-								</Button>
-							</DropdownMenuTrigger>
-
-							<DropdownMenuContent
-								align="end"
-								className="bg-background text-foreground"
-							>
-								<DropdownMenuItem asChild>
-									<Link href={`/blogs/${post.slug}/edit`}>Edit Post</Link>
-								</DropdownMenuItem>
-
-								<DropdownMenuSeparator />
-
-								<DropdownMenuItem className="text-destructive focus:text-destructive">
-									Delete Post
-								</DropdownMenuItem>
-							</DropdownMenuContent>
-						</DropdownMenu>
+						<PostActionsMenu postId={post.id} slug={post.slug} />
 					)}
 				</div>
 
