@@ -1,10 +1,4 @@
-import {
-	ArrowLeft,
-	Bookmark,
-	Heart,
-	MessageCircle,
-	Share2,
-} from "lucide-react";
+import { ArrowLeft, Bookmark, MessageCircle, Share2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -12,6 +6,7 @@ import { Suspense } from "react";
 import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
 import DiscussionSection from "@/components/comments/DiscussionSection";
 import PostActionsMenu from "@/components/posts/PostActionsMenu";
+import PostLikeButton from "@/components/posts/PostLikeButton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Separator } from "@/components/ui/separator";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
@@ -94,8 +89,12 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 							</div>
 						</div>
 
-						<div className="flex gap-6 text-sm text-muted-foreground">
-							<Heart className="size-6" />
+						<div className="flex gap-6 items-center justify-center text-sm text-muted-foreground">
+							<PostLikeButton
+								postId={post.id}
+								liked={post.likedByCurrentUser}
+								likeCount={post.likesCount}
+							/>
 							<MessageCircle className="size-6" />
 							<Bookmark className="size-6" />
 							<Share2 className="size-6" />

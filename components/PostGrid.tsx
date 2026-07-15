@@ -1,5 +1,3 @@
-"use cache";
-
 import PostCards from "@/components/cards/PostCard";
 import { getFeedPosts } from "@/lib/db/queries/posts";
 import { parseSort, parseView } from "@/lib/types/post";

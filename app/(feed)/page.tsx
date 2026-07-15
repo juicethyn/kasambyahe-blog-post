@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import PostGrid from "@/components/PostGrid";
 import PostGridControls from "@/components/PostGridControls";
-import PostCardSkeleton from "@/components/skeletons/PostCardSkeleton";
+import PostGridSkeleton from "@/components/skeletons/PostGridSkeleton";
 
 interface HomeProps {
 	searchParams: Promise<{ sort?: string; view?: string }>;
@@ -26,7 +26,7 @@ export default async function Home({ searchParams }: HomeProps) {
 				<PostGridControls />
 			</Suspense>
 
-			<Suspense fallback={<PostCardSkeleton />}>
+			<Suspense fallback={<PostGridSkeleton view="2" />}>
 				<PostGrid searchParams={searchParams} />
 			</Suspense>
 		</div>
