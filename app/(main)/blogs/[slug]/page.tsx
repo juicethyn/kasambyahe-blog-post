@@ -9,6 +9,7 @@ import PostLikeButton from "@/components/buttons/PostLikeButton";
 import CommentsSheet from "@/components/comments/CommentsSheet";
 import DiscussionSection from "@/components/comments/DiscussionSection";
 import PostActionsMenu from "@/components/posts/PostActionsMenu";
+import DiscussionSkeleton from "@/components/skeletons/DiscussionSkeleton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Separator } from "@/components/ui/separator";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
@@ -113,7 +114,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 
 				<Separator />
 				{/* Discussion Section*/}
-				<Suspense fallback={<div>Loading comments...</div>}>
+				<Suspense fallback={<DiscussionSkeleton />}>
 					<DiscussionSection
 						postId={post.id}
 						postAuthorId={post.author.id}

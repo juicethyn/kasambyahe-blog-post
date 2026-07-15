@@ -43,30 +43,6 @@ export default function CommentItem({
 					<p className="mt-2 whitespace-pre-wrap wrap-break-words leading-7">
 						{comment.content}
 					</p>
-
-					{/* Actions */}
-					<div className="mt-3 flex items-center gap-5 text-sm text-muted-foreground">
-						<button
-							type="button"
-							className="hover:text-foreground transition-colors"
-						>
-							Like
-						</button>
-
-						<button
-							type="button"
-							className="hover:text-foreground transition-colors"
-						>
-							Reply
-						</button>
-
-						<button
-							type="button"
-							className="hover:text-foreground transition-colors"
-						>
-							Show replies
-						</button>
-					</div>
 				</div>
 			</div>
 		</div>

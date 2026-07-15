@@ -45,8 +45,9 @@ function CancelButton() {
 	return (
 		<Button
 			type="button"
-			variant="outline"
+			variant="default"
 			disabled={pending}
+			className="bg-background text-accent-foreground border border-accent-foreground hover:bg-accent-foreground/80 hover:text-background"
 			onClick={() => router.replace("/")}
 		>
 			Cancel
