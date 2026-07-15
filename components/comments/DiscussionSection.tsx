@@ -34,7 +34,8 @@ export default function DiscussionSection({
 				initialComments={comments}
 				trigger={
 					<Button variant="ghost" className="text-center">
-						View all {commentCount} discussions →
+						{" "}
+						View all {commentCount} discussions →{" "}
 					</Button>
 				}
 			/>

@@ -1,12 +1,14 @@
-import { ArrowLeft, Bookmark, MessageCircle, Share2 } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { BlockNoteRenderer } from "@/components/blogs/DynamicEditor";
+import PostCommentButton from "@/components/buttons/PostCommentButton";
+import PostLikeButton from "@/components/buttons/PostLikeButton";
+import CommentsSheet from "@/components/comments/CommentsSheet";
 import DiscussionSection from "@/components/comments/DiscussionSection";
 import PostActionsMenu from "@/components/posts/PostActionsMenu";
-import PostLikeButton from "@/components/posts/PostLikeButton";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Separator } from "@/components/ui/separator";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
@@ -95,9 +97,13 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 								liked={post.likedByCurrentUser}
 								likeCount={post.likesCount}
 							/>
-							<MessageCircle className="size-6" />
-							<Bookmark className="size-6" />
-							<Share2 className="size-6" />
+							<CommentsSheet
+								postId={post.id}
+								postAuthorId={post.author.id}
+								commentCount={commentCount}
+								initialComments={comments}
+								trigger={<PostCommentButton commentCount={commentCount} />}
+							/>
 						</div>
 					</div>
 					<hr />
@@ -106,7 +112,6 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 				<BlockNoteRenderer content={post.content} />
 
 				<Separator />
-
 				{/* Discussion Section*/}
 				<Suspense fallback={<div>Loading comments...</div>}>
 					<DiscussionSection
