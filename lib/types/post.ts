@@ -23,3 +23,21 @@ export interface PostFormValues {
 	coverImageKey: string | null;
 	content: PostContent;
 }
+
+export type SortOption = "latest" | "old" | "popular";
+export type ViewOption = "1" | "2";
+
+export function parseSort(sort?: string): SortOption {
+	switch (sort) {
+		case "old":
+			return "old";
+		case "popular":
+			return "popular";
+		default:
+			return "latest";
+	}
+}
+
+export function parseView(view?: string): ViewOption {
+	return view === "1" ? "1" : "2";
+}

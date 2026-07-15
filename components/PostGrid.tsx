@@ -1,19 +1,31 @@
 "use cache";
 
-import { Suspense } from "react";
 import PostCards from "@/components/cards/PostCard";
-import PostCardSkeleton from "@/components/skeletons/PostCardSkeleton";
 import { getFeedPosts } from "@/lib/db/queries/posts";
+import { parseSort, parseView } from "@/lib/types/post";
 
-export default async function PostGrid() {
-	const posts = await getFeedPosts();
+interface PostGridProps {
+	searchParams: Promise<{ sort?: string; view?: string }>;
+}
+
+export default async function PostGrid({ searchParams }: PostGridProps) {
+	const { sort, view } = await searchParams;
+
+	const activeSort = parseSort(sort);
+	const activeView = parseView(view);
+
+	const posts = await getFeedPosts(activeSort);
 
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+		<div
+			className={
+				activeView === "1"
+					? "grid grid-cols-1 gap-4"
+					: "grid grid-cols-1 lg:grid-cols-2 gap-4"
+			}
+		>
 			{posts.map((post) => (
-				<Suspense fallback={<PostCardSkeleton />} key={post.id}>
-					<PostCards post={post} />
-				</Suspense>
+				<PostCards key={post.id} post={post} />
 			))}
 		</div>
 	);

@@ -1,12 +1,12 @@
 "use cache";
 
 import { desc, eq } from "drizzle-orm";
-import type { FeedPost } from "@/lib/types/post";
+import type { FeedPost, SortOption } from "@/lib/types/post";
 import { db } from "../index";
 import { posts, users } from "../schema";
 
-export async function getFeedPosts(): Promise<FeedPost[]> {
-	const rows = await db
+export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
+	const query = db
 		.select({
 			id: posts.id,
 			title: posts.title,
@@ -24,8 +24,21 @@ export async function getFeedPosts(): Promise<FeedPost[]> {
 			},
 		})
 		.from(posts)
-		.innerJoin(users, eq(posts.authorId, users.id))
-		.orderBy(desc(posts.createdAt));
+		.innerJoin(users, eq(posts.authorId, users.id));
+
+	switch (sort) {
+		case "latest":
+			query.orderBy(desc(posts.createdAt));
+			break;
+		case "old":
+			query.orderBy(posts.createdAt);
+			break;
+		case "popular":
+			query.orderBy(desc(posts.createdAt));
+			break;
+	}
+
+	const rows = await query;
 
 	return rows.map((row) => ({
 		id: row.id,
