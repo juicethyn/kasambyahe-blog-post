@@ -1,6 +1,7 @@
 import PostCards from "@/components/cards/PostCard";
 import { getFeedPosts } from "@/lib/db/queries/posts";
 import { parseSort, parseView } from "@/lib/types/post";
+import PostGridEmpty from "./PostGridEmpty";
 
 interface PostGridProps {
 	searchParams: Promise<{ sort?: string; view?: string }>;
@@ -13,6 +14,10 @@ export default async function PostGrid({ searchParams }: PostGridProps) {
 	const activeView = parseView(view);
 
 	const posts = await getFeedPosts(activeSort);
+
+	if (posts.length === 0) {
+		return <PostGridEmpty />;
+	}
 
 	return (
 		<div

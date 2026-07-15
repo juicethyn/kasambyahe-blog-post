@@ -63,7 +63,11 @@ export default function CommentForm({
 					Sign in to join the discussion.
 				</p>
 				<SignInButton mode="modal">
-					<Button variant="default" size="sm">
+					<Button
+						variant="default"
+						size="sm"
+						className="bg-background text-accent-foreground border border-accent-foreground hover:bg-accent-foreground/80 hover:text-background"
+					>
 						Sign in
 					</Button>
 				</SignInButton>
@@ -83,7 +87,7 @@ export default function CommentForm({
 					className="min-h-0 resize-none border-none bg-transparent p-2 shadow-none focus-visible:ring-0"
 				/>
 
-				<div className="mt-3 flex items-center justify-between gap-3">
+				<div className="mt-3 flex items-center justify-end sm:justify-between gap-3">
 					<p className="hidden text-xs text-muted-foreground sm:block">
 						Be kind to fellow travelers.
 					</p>

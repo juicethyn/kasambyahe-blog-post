@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import PostGrid from "@/components/PostGrid";
+import PostGridBoundary from "@/components/PostGridBoundary";
 import PostGridControls from "@/components/PostGridControls";
 import PostGridControlsSkeleton from "@/components/skeletons/PostGridControlsSkeleton";
 import PostGridSkeleton from "@/components/skeletons/PostGridSkeleton";
@@ -28,7 +29,9 @@ export default async function Home({ searchParams }: HomeProps) {
 			</Suspense>
 
 			<Suspense fallback={<PostGridSkeleton view="2" />}>
-				<PostGrid searchParams={searchParams} />
+				<PostGridBoundary>
+					<PostGrid searchParams={searchParams} />
+				</PostGridBoundary>
 			</Suspense>
 		</div>
 	);
