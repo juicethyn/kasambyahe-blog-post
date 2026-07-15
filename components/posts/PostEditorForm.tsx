@@ -47,7 +47,7 @@ function CancelButton() {
 			type="button"
 			variant="outline"
 			disabled={pending}
-			onClick={() => router.back()}
+			onClick={() => router.replace("/")}
 		>
 			Cancel
 		</Button>

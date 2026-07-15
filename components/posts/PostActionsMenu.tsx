@@ -57,8 +57,6 @@ export default function PostActionsMenu({
 
 					<DropdownMenuItem
 						className="text-destructive focus:text-destructive"
-						// prevent the dropdown from closing/eating the click before
-						// the dialog has a chance to open
 						onSelect={(e) => {
 							e.preventDefault();
 							setShowDeleteDialog(true);
@@ -86,11 +84,9 @@ export default function PostActionsMenu({
 						</AlertDialogDescription>
 					</AlertDialogHeader>
 					<AlertDialogFooter>
-						<AlertDialogCancel className="bg-muted text-muted-foreground hover:bg-muted/90">
-							Cancel
-						</AlertDialogCancel>
+						<AlertDialogCancel variant="outline">Cancel</AlertDialogCancel>
 						<AlertDialogAction
-							className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+							variant="destructive"
 							onClick={() => formRef.current?.requestSubmit()}
 						>
 							Delete
