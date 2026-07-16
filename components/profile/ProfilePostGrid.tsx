@@ -1,6 +1,6 @@
 import { getFeedPosts } from "@/lib/db/queries/posts";
 import { parseSort, parseView } from "@/lib/types/post";
-import { PostGridView } from "./PostGridView";
+import { PostGridView } from "../PostGridView";
 
 interface ProfilePostGridProps {
 	authorId: string;
