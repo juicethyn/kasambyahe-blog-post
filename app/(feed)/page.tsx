@@ -1,3 +1,4 @@
+import type { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import { Suspense } from "react";
 import PostGrid from "@/components/PostGrid";
 import PostGridBoundary from "@/components/PostGridBoundary";
@@ -36,3 +37,7 @@ export default async function Home({ searchParams }: HomeProps) {
 		</div>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Home",
+};

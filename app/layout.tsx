@@ -43,6 +43,7 @@ export const metadata: Metadata = {
 				url: "/images/image_preview.png",
 				width: 1200,
 				height: 630,
+				alt: "KasamByahe - Travel and Route Guide Platform",
 			},
 		],
 		description:

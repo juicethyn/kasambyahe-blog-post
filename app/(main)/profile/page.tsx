@@ -1,3 +1,4 @@
+import type { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import { Suspense } from "react";
 import ProfilePage from "@/components/profile/ProfilePage";
 
@@ -12,3 +13,7 @@ export default async function Profile({ searchParams }: ProfilePageProps) {
 		</Suspense>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Profile",
+};

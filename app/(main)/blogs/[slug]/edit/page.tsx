@@ -1,3 +1,4 @@
+import type { Metadata } from "next/dist/lib/metadata/types/metadata-interface";
 import { notFound, redirect } from "next/navigation";
 import PostEditorForm from "@/components/posts/PostEditorForm";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
@@ -40,3 +41,7 @@ export default async function EditPostPage({ params }: EditPostPageProps) {
 		</section>
 	);
 }
+
+export const metadata: Metadata = {
+	title: "Edit",
+};

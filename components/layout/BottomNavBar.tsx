@@ -12,8 +12,8 @@ export default function MobileBottomNav() {
 	const { openSignIn } = useClerk();
 
 	return (
-		<nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[#FFF8F0] bg-background/95 backdrop-blur lg:hidden">
-			<div className="grid h-16 grid-cols-3">
+		<nav className="border-t border-[#FFF8F0] bg-background/95 lg:hidden">
+			<div className="grid h-16 grid-cols-3 pb-[env(safe-area-inset-bottom)]">
 				{NAV_LINKS.slice(0, 4).map((link) => {
 					const isActive = pathname === link.href;
 					const isSignedIn = Boolean(userId);

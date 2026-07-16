@@ -7,3 +7,7 @@ export default function WritePage() {
 		</section>
 	);
 }
+
+export const metadata = {
+	title: "Write",
+};

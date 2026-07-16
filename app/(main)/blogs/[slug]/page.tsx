@@ -1,4 +1,5 @@
 import { ArrowLeft } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -130,4 +131,27 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 			</section>
 		</Suspense>
 	);
+}
+
+export async function generateMetadata({
+	params,
+}: BlogSlugPageProps): Promise<Metadata> {
+	const { slug } = await params;
+	const post = await getPostBySlug(slug);
+
+	if (!post) {
+		return {
+			title: "Post not found",
+		};
+	}
+
+	return {
+		title: post.title,
+		description: post.excerpt ?? undefined,
+		openGraph: {
+			title: post.title,
+			description: post.excerpt ?? undefined,
+			images: post.coverImageUrl ? [post.coverImageUrl] : undefined,
+		},
+	};
 }

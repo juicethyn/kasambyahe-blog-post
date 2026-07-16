@@ -24,13 +24,13 @@ export default function AppShell({
 	}
 
 	return (
-		<div className="flex h-screen flex-col">
+		<div className="flex h-dvh flex-col">
 			<TopNavbar onToggleSidebar={toggleSidebar} />
 			<div className="flex flex-1 overflow-hidden">
 				<Suspense fallback={<LeftNavBarSkeleton isOpen={sidebarOpen} />}>
 					<LeftNavBar isOpen={sidebarOpen} />
 				</Suspense>
-				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-3 pb-20 lg:p-6">
+				<main className="scrollbar-hide min-w-0 flex-1 overflow-y-auto p-3 lg:p-6">
 					{children}
 				</main>
 				{showRightBar ? <RightBar /> : null}

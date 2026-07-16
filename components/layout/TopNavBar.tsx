@@ -12,7 +12,7 @@ interface TopNavBarProps {
 
 export default function TopNavBar({ onToggleSidebar }: TopNavBarProps) {
 	return (
-		<nav className="lg:sticky lg:top-0 px-3 lg:px-6 min-h-14 lg:h-16 z-50 flex justify-between border-b border-b-[FFF8F0] bg-background">
+		<nav className="lg:sticky lg:top-0 px-3 lg:px-6 h-14 lg:h-16 z-50 flex justify-between border-b border-b-[FFF8F0] bg-background">
 			<div className="flex items-center gap-2">
 				<Button
 					variant="ghost"
