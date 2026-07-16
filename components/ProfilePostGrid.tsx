@@ -1,23 +1,21 @@
 import { getFeedPosts } from "@/lib/db/queries/posts";
 import { parseSort, parseView } from "@/lib/types/post";
-import PostGridEmpty from "./PostGridEmpty";
 import { PostGridView } from "./PostGridView";
 
-interface PostGridProps {
+interface ProfilePostGridProps {
+	authorId: string;
 	searchParams: Promise<{ sort?: string; view?: string }>;
 }
 
-export default async function PostGrid({ searchParams }: PostGridProps) {
+export default async function ProfilePostGrid({
+	authorId,
+	searchParams,
+}: ProfilePostGridProps) {
 	const { sort, view } = await searchParams;
-
 	const activeSort = parseSort(sort);
 	const activeView = parseView(view);
 
-	const posts = await getFeedPosts(activeSort);
-
-	if (posts.length === 0) {
-		return <PostGridEmpty />;
-	}
+	const posts = await getFeedPosts(activeSort, { authorId });
 
 	return <PostGridView posts={posts} view={activeView} />;
 }

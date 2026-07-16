@@ -1,4 +1,3 @@
-// components/posts/PostActionsMenu.tsx
 "use client";
 
 import { MoreHorizontal } from "lucide-react";

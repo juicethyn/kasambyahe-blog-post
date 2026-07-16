@@ -7,7 +7,10 @@ import type { FeedPost, SortOption } from "@/lib/types/post";
 import { db } from "../index";
 import { comments, likes, posts, users } from "../schema";
 
-export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
+export async function getFeedPosts(
+	sort: SortOption,
+	options?: { authorId?: string },
+): Promise<FeedPost[]> {
 	const query = db
 		.select({
 			id: posts.id,
@@ -27,6 +30,10 @@ export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 		})
 		.from(posts)
 		.innerJoin(users, eq(posts.authorId, users.id));
+
+	if (options?.authorId) {
+		query.where(eq(posts.authorId, options.authorId));
+	}
 
 	switch (sort) {
 		case "latest":
