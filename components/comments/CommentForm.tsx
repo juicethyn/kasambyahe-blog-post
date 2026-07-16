@@ -47,14 +47,19 @@ export default function CommentForm({
 
 	const isSignedIn = useUser().isSignedIn;
 
+	const handledCommentIdRef = useRef<string | null>(null);
+
 	useEffect(() => {
-		if (state.success && formRef.current) {
+		if (
+			state.success &&
+			state.comment &&
+			state.comment.id !== handledCommentIdRef.current
+		) {
+			handledCommentIdRef.current = state.comment.id;
 			formRef.current?.reset();
-			if (state.comment && onCommentSubmit) {
-				onCommentSubmit?.(state.comment);
-			}
+			onCommentSubmit?.(state.comment);
 		}
-	}, [state.success, state.comment, onCommentSubmit]);
+	}, [state, onCommentSubmit]);
 
 	if (!isSignedIn) {
 		return (

@@ -18,11 +18,7 @@ export default function CommentsList({ comments, postAuthorId }: CommentProps) {
 
 						return (
 							<div key={comment.id}>
-								<CommentItem
-									key={comment.id}
-									comment={comment}
-									postAuthorId={postAuthorId}
-								/>
+								<CommentItem comment={comment} postAuthorId={postAuthorId} />
 							</div>
 						);
 					})}

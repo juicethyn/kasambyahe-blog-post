@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
 	Sheet,
 	SheetContent,
@@ -42,7 +42,9 @@ export default function CommentsSheet({
 }: CommentsSheetProps) {
 	const [comments, setComments] = useState<PostComment[]>(initialComments);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(Math.ceil(commentCount / 10));
+	const totalPages = Math.max(1, Math.ceil(commentCount / 10));
+	const pageInRef = useRef({ currentPage, totalPages });
+	pageInRef.current = { currentPage, totalPages };
 	const [isLoading, setIsLoading] = useState(false);
 	const [count, setCount] = useState(commentCount);
 	const [open, setOpen] = useState(defaultOpen ?? false);
@@ -55,7 +57,6 @@ export default function CommentsSheet({
 				const result = await getCommentsPageAction(postId, page, 10);
 				setComments(result.comments);
 				setCurrentPage(result.page);
-				setTotalPages(result.totalPages);
 				setCount(result.totalCount);
 			} catch (error) {
 				console.error("Error loading comments:", error);
@@ -83,7 +84,6 @@ export default function CommentsSheet({
 
 			setCount((prev) => {
 				const next = prev + 1;
-				setTotalPages(Math.ceil(next / 10));
 				return next;
 			});
 		},
