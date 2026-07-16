@@ -1,11 +1,11 @@
 "use server";
 
-import { desc, eq, inArray } from "drizzle-orm";
+import { count, desc, eq, inArray } from "drizzle-orm";
 import { getPostLikesCount, isPostLikedByUser } from "@/lib/actions/post-likes";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import type { FeedPost, SortOption } from "@/lib/types/post";
 import { db } from "../index";
-import { likes, posts, users } from "../schema";
+import { comments, likes, posts, users } from "../schema";
 
 export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 	const query = db
@@ -38,7 +38,6 @@ export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 			break;
 
 		case "popular":
-			// We'll sort by likes after computing them.
 			query.orderBy(desc(posts.createdAt));
 			break;
 	}
@@ -54,6 +53,13 @@ export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 		})
 		.from(likes)
 		.where(inArray(likes.postId, postIds));
+
+	const allComments = await db
+		.select({
+			postId: comments.postId,
+		})
+		.from(comments)
+		.where(inArray(comments.postId, postIds));
 
 	const dbUser = await getCurrentDbUserOrNull();
 
@@ -80,6 +86,15 @@ export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 		likesByPost.set(like.postId, current);
 	}
 
+	const commentCountMap = new Map<string, number>();
+
+	for (const comment of allComments) {
+		commentCountMap.set(
+			comment.postId,
+			(commentCountMap.get(comment.postId) ?? 0) + 1,
+		);
+	}
+
 	const feed = rows.map((row) => {
 		const metadata = likesByPost.get(row.id);
 
@@ -102,6 +117,7 @@ export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 
 			likesCount: metadata?.count ?? 0,
 			likedByCurrentUser: metadata?.likedByCurrentUser ?? false,
+			commentCount: commentCountMap.get(row.id) ?? 0,
 		};
 	});
 
@@ -146,11 +162,18 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 
 	const dbUser = await getCurrentDbUserOrNull();
 
-	const likesCount = await getPostLikesCount(row.id);
+	const [likesCount, commentResult, likedByCurrentUser] = await Promise.all([
+		getPostLikesCount(row.id),
 
-	const likedByCurrentUser = dbUser
-		? await isPostLikedByUser(row.id, dbUser.id)
-		: false;
+		db
+			.select({
+				count: count(),
+			})
+			.from(comments)
+			.where(eq(comments.postId, row.id)),
+
+		dbUser ? isPostLikedByUser(row.id, dbUser.id) : Promise.resolve(false),
+	]);
 
 	return {
 		id: row.id,
@@ -169,6 +192,7 @@ export async function getPostBySlug(slug: string): Promise<FeedPost | null> {
 		},
 		likesCount,
 		likedByCurrentUser,
+		commentCount: commentResult[0]?.count ?? 0,
 	};
 }
 
