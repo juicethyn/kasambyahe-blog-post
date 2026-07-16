@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth, useClerk } from "@clerk/nextjs";
 import { Heart } from "lucide-react";
 import { useOptimistic, useTransition } from "react";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,9 @@ export default function PostLikeButton({
 		},
 	);
 
+	const { userId } = useAuth();
+	const { openSignIn } = useClerk();
+
 	return (
 		<div className="flex items-center gap-1">
 			<Button
@@ -51,6 +55,11 @@ export default function PostLikeButton({
 				onClick={(e) => {
 					e.preventDefault();
 					e.stopPropagation();
+
+					if (!userId) {
+						openSignIn();
+						return;
+					}
 
 					startTransition(async () => {
 						setOptimistic("toggle");

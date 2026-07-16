@@ -47,17 +47,18 @@ export default function CommentsSheet({
 }: CommentsSheetProps) {
 	const [comments, setComments] = useState<PostComment[]>(initialComments);
 	const [currentPage, setCurrentPage] = useState(1);
-	const totalPages = Math.max(1, Math.ceil(commentCount / 10));
-	const pageInRef = useRef({ currentPage, totalPages });
-	pageInRef.current = { currentPage, totalPages };
 	const [isLoading, setIsLoading] = useState(false);
 	const [count, setCount] = useState(commentCount);
 	const [open, setOpen] = useState(defaultOpen ?? false);
 
+	const totalPages = Math.max(1, Math.ceil(count / 10));
+
+	const pageInfoRef = useRef({ currentPage, totalPages });
+	pageInfoRef.current = { currentPage, totalPages };
+
 	const loadPage = useCallback(
 		async (page: number) => {
 			setIsLoading(true);
-
 			try {
 				const result = await getCommentsPageAction(postId, page, 10);
 				setComments(result.comments);
@@ -72,28 +73,17 @@ export default function CommentsSheet({
 		[postId],
 	);
 
-	const handleCommentSubmit = useCallback(
-		(newComment: PostComment) => {
-			console.log("Adding comment:", newComment.id);
-			console.count("handleCommentSubmit");
-			console.log("Received in CommentsSheet", newComment.id);
+	const handleCommentSubmit = useCallback((newComment: PostComment) => {
+		const { currentPage, totalPages } = pageInfoRef.current;
 
-			if (currentPage === totalPages) {
-				setComments((prev) => {
-					if (prev.some((comment) => comment.id === newComment.id)) {
-						return prev;
-					}
-					return [...prev, newComment];
-				});
-			}
+		if (currentPage === totalPages) {
+			setComments((prev) =>
+				prev.some((c) => c.id === newComment.id) ? prev : [...prev, newComment],
+			);
+		}
 
-			setCount((prev) => {
-				const next = prev + 1;
-				return next;
-			});
-		},
-		[currentPage, totalPages],
-	);
+		setCount((prev) => prev + 1);
+	}, []);
 
 	const handleModerate = useCallback(
 		async (commentId: string, approved: boolean) => {
@@ -110,10 +100,12 @@ export default function CommentsSheet({
 					),
 				);
 				console.error(result.message);
+				return;
 			}
-			await loadPage(currentPage);
+
+			await loadPage(pageInfoRef.current.currentPage);
 		},
-		[loadPage, currentPage],
+		[loadPage],
 	);
 
 	return (

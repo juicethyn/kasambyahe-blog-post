@@ -1,4 +1,4 @@
-import { asc, count, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
 import type { PostComment } from "@/lib/types/comment";
 import { db } from "../index";
 import { comments, posts, users } from "../schema";
@@ -29,7 +29,7 @@ export async function getCommentsByPostId(
 		.where(
 			options?.includeHidden
 				? eq(comments.postId, postId)
-				: eq(comments.approved, true),
+				: and(eq(comments.postId, postId), eq(comments.approved, true)),
 		)
 		.orderBy(asc(comments.createdAt))
 		.offset(offset)
@@ -61,7 +61,7 @@ export async function getCommentCountByPostId(
 		.where(
 			options?.includeHidden
 				? eq(comments.postId, postId)
-				: eq(comments.approved, true),
+				: and(eq(comments.postId, postId), eq(comments.approved, true)),
 		)
 		.execute();
 

@@ -30,6 +30,7 @@ export default function DiscussionSection({
 			<DiscussionPreview comments={comments} postAuthorId={postAuthorId} />
 
 			<CommentsSheet
+				key={postId}
 				postId={postId}
 				postAuthorId={postAuthorId}
 				commentCount={commentCount}

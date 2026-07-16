@@ -101,6 +101,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 								likeCount={post.likesCount}
 							/>
 							<CommentsSheet
+								key={post.id}
 								postId={post.id}
 								postAuthorId={post.author.id}
 								commentCount={commentCount}
