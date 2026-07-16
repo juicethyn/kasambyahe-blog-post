@@ -131,10 +131,11 @@ async function main() {
 		.insert(posts)
 		.values([
 			{
-				title: "Weekend Ride to Tagaytay: A Beginner-Friendly Day Trip",
+				title:
+					"Weekend Ride to Tagaytay: A Beginner's Guide to Your First Scenic Ride",
 				slug: "weekend-ride-to-tagaytay-beginner-guide",
 				excerpt:
-					"Planning your first ride to Tagaytay? Here's a simple route, suggested departure time, scenic stops, and practical tips for a relaxing weekend escape.",
+					"Planning your first ride to Tagaytay? Here's a beginner-friendly guide covering the best departure time, recommended routes, fuel stops, parking tips, and must-visit cafés for a relaxing weekend escape.",
 				content: tagaytayRide(),
 				authorId: author.id,
 				coverImageUrl:
@@ -142,95 +143,110 @@ async function main() {
 				coverImageKey: "1Q0Zj8paxwk5I3Ya5LWykHB9sqN41PaiLQ5fOKzhCJdFGMrg",
 			},
 			{
-				title: "Marilaque Sunrise Ride: Enjoy the View, Ride Responsibly",
-				slug: "marilaque-sunrise-ride-guide",
+				title:
+					"Marilaque Sunrise Ride: A Beginner's Guide to Riding Responsibly",
+				slug: "marilaque-sunrise-ride-beginner-guide",
 				excerpt:
-					"Marilaque offers breathtaking mountain scenery, but it deserves respect. Here's how to enjoy one of the country's most popular riding roads safely.",
-				content: marilaqueGuide(),
+					"Marilaque is one of the Philippines' most iconic riding destinations. Learn the best time to leave, must-visit stops, and essential safety reminders to enjoy the mountain roads responsibly.",
+				content: marilaqueRide(),
 				authorId: author.id,
 				coverImageUrl:
 					"https://b5xxp82q3r.ufs.sh/f/1Q0Zj8paxwk55qiEyVXx3DoeluEiORcFWvIw1QJy92h7N0KG",
 				coverImageKey: "1Q0Zj8paxwk55qiEyVXx3DoeluEiORcFWvIw1QJy92h7N0KG",
 			},
 			{
-				title: "A Weekend Food Crawl Through Binondo",
-				slug: "weekend-food-crawl-binondo",
+				title: "Top 5 Rider-Friendly Food Stops Along Marilaque",
+				slug: "top-5-rider-friendly-food-stops-along-marilaque",
 				excerpt:
-					"Spend a day exploring the world's oldest Chinatown with this simple food crawl featuring classic dishes, hidden gems, and practical travel tips.",
-				content: binondoFoodGuide(),
+					"A good ride isn't complete without great food. Here are five rider-favorite cafés and eateries along Marilaque where you can rest, refuel, and enjoy the view before continuing your journey.",
+				content: marilaqueFoodStops(),
 				authorId: author.id,
 				coverImageUrl:
-					"https://b5xxp82q3r.ufs.sh/f/1Q0Zj8paxwk55zRoiOx3DoeluEiORcFWvIw1QJy92h7N0KGg",
-				coverImageKey: "1Q0Zj8paxwk55zRoiOx3DoeluEiORcFWvIw1QJy92h7N0KGg",
+					"https://b5xxp82q3r.ufs.sh/f/1Q0Zj8paxwk5qR9rVLh09E2M8kzXL1Np5HbfxgTICAnBWtoj",
+				coverImageKey: "1Q0Zj8paxwk5qR9rVLh09E2M8kzXL1Np5HbfxgTICAnBWtoj",
 			},
 		] as NewPost[])
 		.returning();
 
 	if (insertedPosts.length >= 3) {
 		await db.insert(comments).values([
-			// Tagaytay
 			{
 				postId: insertedPosts[0].id,
 				authorId: author.id,
 				content:
-					"I usually leave around 5 AM to avoid the traffic in Santa Rosa. Makes the ride much more enjoyable.",
+					"I usually leave around 5:30 AM and the roads are still pretty clear. Definitely makes the ride more relaxing.",
 			},
 			{
 				postId: insertedPosts[0].id,
 				authorId: rider1.id,
 				content:
-					"Mahogany Market is definitely worth the stop. The bulalo is still one of my favorites.",
+					"Mahogany Market is always my first stop. Nothing beats hot bulalo after an early morning ride.",
 			},
 			{
 				postId: insertedPosts[0].id,
 				authorId: rider2.id,
 				content:
-					"Thanks for mentioning the fog. I almost got caught riding there late afternoon once.",
+					"Great reminder about the afternoon fog. It gets surprisingly thick near People's Park.",
+			},
+			{
+				postId: insertedPosts[0].id,
+				authorId: rider3.id,
+				content:
+					"Tagaytay is overrated. Complete waste of gas. Don't even bother going.",
 			},
 
-			// Marilaque
 			{
 				postId: insertedPosts[1].id,
 				authorId: author.id,
 				content:
-					"Completely agree. The scenery is amazing, but people should ride within their limits.",
+					"Marilaque is beautiful, but it's much more enjoyable when everyone rides responsibly.",
 			},
 			{
 				postId: insertedPosts[1].id,
 				authorId: rider3.id,
 				content:
-					"I've started going on weekdays instead of weekends. Much less crowded.",
+					"I've started riding there on weekdays instead of Sundays. Less traffic and a much more peaceful experience.",
 			},
 			{
 				postId: insertedPosts[1].id,
 				authorId: rider1.id,
-				content: "Complete riding gear should always be non-negotiable.",
+				content:
+					"Full riding gear and defensive riding should always come first, especially on the mountain curves.",
+			},
+			{
+				postId: insertedPosts[1].id,
+				authorId: rider2.id,
+				content: "Forget the speed limit. Just send it if the road is clear 😂",
 			},
 
-			// Binondo
 			{
 				postId: insertedPosts[2].id,
 				authorId: rider2.id,
 				content:
-					"I'd also recommend trying the fried siopao near Ongpin. It's underrated.",
+					"Jariel's Peak has become our group's default breakfast stop every Sunday ride.",
 			},
 			{
 				postId: insertedPosts[2].id,
 				authorId: author.id,
 				content:
-					"Good tip about bringing cash. Some of the older restaurants still don't accept cards.",
+					"I'd also recommend trying the local eateries once you reach Infanta. Fresh seafood after a long ride is hard to beat.",
 			},
 			{
 				postId: insertedPosts[2].id,
 				authorId: rider3.id,
 				content:
-					"I always end my food crawl with fresh hopia before heading home.",
+					"Kape Natividad serves great coffee. Perfect place to cool down before heading back home.",
+			},
+			{
+				postId: insertedPosts[2].id,
+				authorId: rider1.id,
+				content:
+					"🔥 SELLING CHEAP HELMETS 🔥 Message me on Facebook for discounts!!",
 			},
 		]);
 	}
 
 	await db.insert(likes).values([
-		// Tagaytay (4 likes)
 		{
 			postId: insertedPosts[0].id,
 			userId: author.id,
@@ -247,8 +263,6 @@ async function main() {
 			postId: insertedPosts[0].id,
 			userId: rider3.id,
 		},
-
-		// Marilaque (3 likes)
 		{
 			postId: insertedPosts[1].id,
 			userId: author.id,
@@ -262,7 +276,6 @@ async function main() {
 			userId: rider3.id,
 		},
 
-		// Binondo (2 likes)
 		{
 			postId: insertedPosts[2].id,
 			userId: author.id,
@@ -286,68 +299,150 @@ function tagaytayRide(): PostContent {
 		heading("Weekend Ride to Tagaytay"),
 
 		paragraph(
-			"Tagaytay remains one of the easiest weekend rides for riders coming from Metro Manila. The cool weather, scenic roads, and countless coffee shops make it a perfect destination.",
+			"Tagaytay is one of the most beginner-friendly destinations for riders and drivers coming from Metro Manila. With its cool climate, scenic mountain roads, and breathtaking views of Taal Volcano, it's the perfect place to escape the city's busy streets for a relaxing weekend ride.",
 		),
 
-		heading("Suggested Departure", 2),
+		heading("Best Time to Leave", 2),
 
-		bullet("Leave between 5:30 AM and 6:30 AM"),
-		bullet("Avoid Aguinaldo Highway after 8 AM"),
-		bullet("Bring cash for parking and breakfast"),
+		bullet("Leave between 5:30 AM and 6:30 AM to avoid heavy traffic."),
+		bullet("Take the SLEX → Santa Rosa Exit route for a smoother ride."),
+		bullet("Avoid Aguinaldo Highway after 8:00 AM on weekends."),
+		bullet("Fill up your tank before entering Tagaytay proper."),
+
+		divider(),
+
+		heading("Things to Bring", 2),
+
+		bullet("Driver's License and OR/CR"),
+		bullet("Rain gear (weather changes quickly in Tagaytay)"),
+		bullet("Cash for parking, tolls, and local eateries"),
+		bullet("Power bank and phone mount for navigation"),
+		bullet("Drinking water"),
 
 		divider(),
 
 		heading("Recommended Stops", 2),
 
-		numbered("Breakfast at Mahogany Market"),
-		numbered("People's Park in the Sky"),
-		numbered("Coffee overlooking Taal Volcano"),
+		numbered("Mahogany Beef Market for an affordable breakfast."),
+		numbered("People's Park in the Sky for panoramic mountain views."),
+		numbered("Crosswinds for a relaxing coffee break."),
+		numbered("Sky Ranch for families and sunset views."),
+		numbered("Picnic Grove for sightseeing and fresh air."),
+
+		divider(),
+
+		heading("Ride Safety Tips", 2),
+
+		bullet("Maintain a safe following distance on downhill roads."),
+		bullet("Reduce speed when roads are wet or foggy."),
+		bullet("Use engine braking instead of relying only on your brakes."),
+		bullet("Ride within your comfort zone, especially on blind corners."),
 
 		quote(
-			"Always check weather conditions before riding. Fog can reduce visibility in the afternoon.",
+			"The goal isn't to get there first—it's to get there safely and enjoy every kilometer of the journey.",
 		),
 	];
 }
 
-function marilaqueGuide(): PostContent {
+function marilaqueRide(): PostContent {
 	return [
 		heading("Marilaque Sunrise Ride"),
 
 		paragraph(
-			"Marilaque Highway offers one of the most scenic roads near Metro Manila. Ride responsibly and respect fellow motorists.",
+			"Stretching across Rizal and Quezon, Marilaque Highway has become one of the most popular riding destinations in the Philippines. The winding mountain roads, cool morning breeze, and scenic viewpoints attract thousands of riders every weekend. Whether it's your first visit or your tenth, riding responsibly is what makes the journey enjoyable for everyone.",
 		),
 
-		heading("Safety Reminder", 2),
+		heading("Best Time to Leave", 2),
 
-		bullet("Never overspeed on blind corners"),
-		bullet("Avoid racing"),
-		bullet("Wear complete riding gear"),
+		bullet("Leave between 4:30 AM and 5:30 AM."),
+		bullet("Expect heavier traffic after 8:00 AM."),
+		bullet("Ride before the sun gets too hot."),
+		bullet("Check weather conditions before heading out."),
 
-		paragraph(
-			"The best experience is arriving before sunrise when traffic is still light.",
+		divider(),
+
+		heading("Things to Bring", 2),
+
+		bullet("Full riding gear"),
+		bullet("Rain gear"),
+		bullet("Cash for food and parking"),
+		bullet("Hydration bottle"),
+		bullet("Portable tire inflator or repair kit"),
+
+		divider(),
+
+		heading("Recommended Stops", 2),
+
+		numbered("Jariel's Peak for breakfast and coffee."),
+		numbered("The Monkey Point viewpoint for scenic photos."),
+		numbered("Sierra Madre Hotel for a quick rest."),
+		numbered("Local eateries in Infanta if continuing the ride."),
+
+		divider(),
+
+		heading("Ride Responsibly", 2),
+
+		bullet("Stay within your lane at all times."),
+		bullet("Avoid overtaking on blind corners."),
+		bullet("Respect fellow riders, cyclists, and motorists."),
+		bullet("Never race on public roads."),
+		bullet("Ride according to your skill level."),
+
+		quote(
+			"Marilaque isn't famous because of speed—it's famous because of the incredible roads and scenery. Ride safe so you can always come back for another sunrise.",
 		),
-
-		quote("The mountain is not a racetrack. Ride home safely."),
 	];
 }
 
-function binondoFoodGuide(): PostContent {
+function marilaqueFoodStops(): PostContent {
 	return [
-		heading("Weekend Food Crawl in Binondo"),
+		heading("Top 5 Rider-Friendly Food Stops Along Marilaque"),
 
 		paragraph(
-			"Binondo is one of the oldest Chinatowns in the world. You can spend an entire day exploring hidden restaurants and local delicacies.",
+			"One of the best parts of riding Marilaque isn't just the winding roads—it's discovering cafés and restaurants where riders gather to rest, grab breakfast, and enjoy the mountain scenery. Whether you're riding solo or with friends, these stops are worth adding to your itinerary.",
 		),
 
-		heading("Must Try", 2),
+		heading("1. Jariel's Peak", 2),
 
-		bullet("Fresh lumpia"),
-		bullet("Xiao Long Bao"),
-		bullet("Hopia"),
-		bullet("Hand-pulled noodles"),
+		paragraph(
+			"A classic stop for riders. Enjoy affordable meals, hot coffee, and one of the best mountain views along the highway.",
+		),
 
-		paragraph("Most restaurants accept cash, so bring enough for the day."),
+		heading("2. Kape Natividad", 2),
 
-		quote("Come hungry. Every street has something worth trying."),
+		paragraph(
+			"A cozy café perfect for relaxing after the twisty roads. Their brewed coffee pairs perfectly with the cool mountain weather.",
+		),
+
+		heading("3. Sierra Madre Hotel", 2),
+
+		paragraph(
+			"A quiet place to stretch, grab refreshments, and enjoy the surrounding scenery before continuing your ride.",
+		),
+
+		heading("4. Local Carinderias in Infanta", 2),
+
+		paragraph(
+			"If you're continuing all the way to Infanta, you'll find plenty of affordable seafood and local Filipino dishes that are perfect after a long ride.",
+		),
+
+		heading("5. Roadside Coffee Stops", 2),
+
+		paragraph(
+			"Several small coffee stalls have popped up along Marilaque. They're inexpensive, rider-friendly, and offer great places to meet fellow enthusiasts.",
+		),
+
+		divider(),
+
+		heading("Rider Tips", 2),
+
+		bullet("Bring cash—many small cafés don't accept digital payments."),
+		bullet("Park only in designated areas."),
+		bullet("Support local businesses whenever possible."),
+		bullet("Stay hydrated before continuing your ride."),
+
+		quote(
+			"Sometimes the best memories aren't made at the destination—but over coffee with fellow riders along the way.",
+		),
 	];
 }

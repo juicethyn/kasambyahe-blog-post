@@ -35,12 +35,19 @@ export const metadata: Metadata = {
 	],
 	creator: "KasamByahe Team",
 	publisher: "KasamByahe Team",
-	metadataBase: new URL("https://kasambyahe.vercel.app"),
+	metadataBase: new URL("https://kasambyahe-blog-post.vercel.app"),
 	openGraph: {
 		title: "KasamByahe",
+		images: [
+			{
+				url: "/images/image_preview.png",
+				width: 1200,
+				height: 630,
+			},
+		],
 		description:
 			"A travel and route guide platform for new motorcycle riders and car owners in the Philippines",
-		url: "https://kasambyahe.vercel.app",
+		url: "https://kasambyahe-blog-post.vercel.app",
 		siteName: "KasamByahe",
 		locale: "en_PH",
 		type: "website",

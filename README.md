@@ -1,36 +1,244 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# KasamByahe 🛵
 
-## Getting Started
+KasamByahe is a community-driven travel and route-sharing platform built with **Next.js**. It allows users to discover destination guides, travel tips, and community discussions that help riders and drivers navigate the Philippines with more confidence.
 
-First, run the development server:
+The project was built as a **2-week internship project**, focusing on building a production-ready full-stack application using modern web technologies.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## ✨ Features
+
+### Authentication
+- Secure authentication with Clerk
+- User profile integration
+- Protected actions for authenticated users
+
+### Blog Posts
+- Create, edit, and delete blog posts
+- Rich text editor powered by BlockNote
+- Upload cover images using UploadThing
+- Responsive blog post pages
+- Automatic slug generation
+
+### Community Interaction
+- Like and unlike blog posts
+- Paginated comments
+- Optimistic UI updates for commenting
+- Comment Moderation
+
+### User Experience
+- Responsive design
+- Skeleton loading states
+- Empty states
+- Relative timestamps
+- Mobile-friendly navigation
+---
+
+## 🖼️ Screenshots
+![alt text](public/images/image_preview.png)
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+- Next.js 15 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- shadcn/ui
+- Lucide React
+
+### Backend
+
+- Next.js Server Actions
+- Drizzle ORM
+- Neon PostgreSQL
+
+### Authentication
+
+- Clerk
+
+### Rich Text Editor
+
+- BlockNote
+
+### File Uploads
+
+- UploadThing
+
+### Deployment
+
+- Vercel
+
+---
+
+## 📂 Project Structure
+
+```
+app/
+components/
+lib/
+ ├── actions/
+ ├── auth/
+ ├── db/
+ ├── schema/
+ ├── types/
+scripts/
+public/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🚀 Getting Started
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Clone the repository
 
-## Learn More
+```bash
+git clone https://github.com/<your-username>/kasambyahe.git
 
-To learn more about Next.js, take a look at the following resources:
+cd kasambyahe
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 2. Install dependencies
 
-## Deploy on Vercel
+```bash
+pnpm install
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 3. Configure environment variables
+
+Create a `.env.local` file.
+
+Example:
+
+```env
+DATABASE_URL=
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+
+UPLOADTHING_TOKEN=
+UPLOADTHING_SECRET=
+UPLOADTHING_APP_ID=
+
+SEED_CLERK_USER_ID= 
+```
+
+---
+
+### 4. Run database migrations
+
+```bash
+pnpm db:generate
+
+pnpm db:migrate
+```
+
+---
+
+### 5. Seed the database
+
+```bash
+pnpm db:seed
+```
+
+---
+
+### 6. Start development server
+
+```bash
+pnpm dev
+```
+
+Open
+
+```
+http://localhost:3000
+```
+
+---
+
+## 📖 Available Scripts
+
+```bash
+pnpm dev
+
+pnpm build
+
+pnpm start
+
+pnpm db:generate
+
+pnpm db:migrate
+
+pnpm db:seed
+```
+
+---
+
+## Database
+
+The project uses:
+
+- Neon PostgreSQL
+- Drizzle ORM
+
+Current schema includes:
+
+- Users
+- Posts
+- Comments
+- Likes
+
+---
+
+## Features Implemented
+
+- ✅ Authentication
+- ✅ Rich Text Editor
+- ✅ Image Uploads
+- ✅ Blog CRUD
+- ✅ Likes
+- ✅ Comments
+- ✅ User Profile
+- ✅ Responsive UI
+- ✅ Skeleton Loading
+- ✅ Deployment
+
+---
+
+## Future Improvements
+
+Some features planned for future versions include:
+
+- Saved Posts
+- Search
+- Categories & Tags
+- Notifications
+- Infinite Scrolling
+- Richer analytics
+- Admin dashboard
+
+---
+
+## Author
+
+Developed by **Juzzthyn Griey Perez**
+
+GitHub:
+https://github.com/juicethyn
+
+LinkedIn:
+https://www.linkedin.com/in/juzzthynperez/
+
+---
+
+## License
+
+This project is for educational and portfolio purposes.

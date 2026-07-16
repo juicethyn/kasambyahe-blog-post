@@ -6,7 +6,7 @@ interface PostGridSkeletonProps {
 }
 
 export default function PostGridSkeleton({ view }: PostGridSkeletonProps) {
-	const count = view === "1" ? 6 : 8;
+	const count = view === "1" ? 2 : 4;
 
 	const skeletonIds = Array.from({ length: count }, (_, i) => i + 1);
 
