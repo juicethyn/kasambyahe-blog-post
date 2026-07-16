@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { eq, type InferInsertModel } from "drizzle-orm";
 import { db } from "@/lib/db";
-import { comments, likes, posts, savedPosts, users } from "@/lib/db/schema";
+import { comments, likes, posts, users } from "@/lib/db/schema";
 import type { PostContent } from "@/lib/types/post";
 
 const seedClerkUserId = process.env.SEED_CLERK_USER_ID;
@@ -51,7 +51,6 @@ async function main() {
 
 	await db.delete(likes);
 	await db.delete(comments);
-	await db.delete(savedPosts);
 	await db.delete(posts);
 
 	const insertedPosts = await db

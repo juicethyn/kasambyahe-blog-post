@@ -8,6 +8,7 @@ interface DiscussionSectionProps {
 	postAuthorId: string;
 	commentCount: number;
 	comments: PostComment[];
+	canModerate: boolean;
 }
 
 export default function DiscussionSection({
@@ -15,6 +16,7 @@ export default function DiscussionSection({
 	postAuthorId,
 	commentCount,
 	comments,
+	canModerate,
 }: DiscussionSectionProps) {
 	return (
 		<section className="space-y-4">
@@ -38,6 +40,7 @@ export default function DiscussionSection({
 						View all {commentCount} discussions →{" "}
 					</Button>
 				}
+				canModerate={canModerate}
 			/>
 		</section>
 	);

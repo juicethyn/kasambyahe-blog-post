@@ -4,9 +4,16 @@ import CommentItem from "./CommentItem";
 interface CommentProps {
 	comments: PostComment[];
 	postAuthorId: string;
+	canModerate: boolean;
+	onModerate: (commentId: string, approved: boolean) => void;
 }
 
-export default function CommentsList({ comments, postAuthorId }: CommentProps) {
+export default function CommentsList({
+	comments,
+	postAuthorId,
+	canModerate,
+	onModerate,
+}: CommentProps) {
 	return (
 		<div className="space-y-4">
 			{comments.length === 0 ? (
@@ -18,7 +25,12 @@ export default function CommentsList({ comments, postAuthorId }: CommentProps) {
 
 						return (
 							<div key={comment.id}>
-								<CommentItem comment={comment} postAuthorId={postAuthorId} />
+								<CommentItem
+									comment={comment}
+									postAuthorId={postAuthorId}
+									canModerate={canModerate}
+									onModerate={onModerate}
+								/>
 							</div>
 						);
 					})}

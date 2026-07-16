@@ -1,6 +1,6 @@
 "use server";
 
-import { count, desc, eq, inArray } from "drizzle-orm";
+import { and, count, desc, eq, inArray } from "drizzle-orm";
 import { getPostLikesCount, isPostLikedByUser } from "@/lib/actions/post-likes";
 import { getCurrentDbUserOrNull } from "@/lib/auth/get-current-db-user";
 import type { FeedPost, SortOption } from "@/lib/types/post";
@@ -59,7 +59,7 @@ export async function getFeedPosts(sort: SortOption): Promise<FeedPost[]> {
 			postId: comments.postId,
 		})
 		.from(comments)
-		.where(inArray(comments.postId, postIds));
+		.where(and(inArray(comments.postId, postIds), eq(comments.approved, true)));
 
 	const dbUser = await getCurrentDbUserOrNull();
 

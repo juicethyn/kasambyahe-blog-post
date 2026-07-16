@@ -9,7 +9,10 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { getCommentsPageAction } from "@/lib/actions/comments";
+import {
+	getCommentsPageAction,
+	moderateCommentAction,
+} from "@/lib/actions/comments";
 import type { PostComment } from "@/lib/types/comment";
 import {
 	Pagination,
@@ -30,6 +33,7 @@ interface CommentsSheetProps {
 	initialComments: PostComment[];
 	trigger?: React.ReactNode;
 	defaultOpen?: boolean;
+	canModerate: boolean;
 }
 
 export default function CommentsSheet({
@@ -39,6 +43,7 @@ export default function CommentsSheet({
 	initialComments,
 	trigger,
 	defaultOpen,
+	canModerate,
 }: CommentsSheetProps) {
 	const [comments, setComments] = useState<PostComment[]>(initialComments);
 	const [currentPage, setCurrentPage] = useState(1);
@@ -90,6 +95,27 @@ export default function CommentsSheet({
 		[currentPage, totalPages],
 	);
 
+	const handleModerate = useCallback(
+		async (commentId: string, approved: boolean) => {
+			setComments((prev) =>
+				prev.map((c) => (c.id === commentId ? { ...c, approved } : c)),
+			);
+
+			const result = await moderateCommentAction(commentId, approved);
+
+			if (!result.success) {
+				setComments((prev) =>
+					prev.map((c) =>
+						c.id === commentId ? { ...c, approved: !approved } : c,
+					),
+				);
+				console.error(result.message);
+			}
+			await loadPage(currentPage);
+		},
+		[loadPage, currentPage],
+	);
+
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
 			{trigger && <SheetTrigger asChild>{trigger}</SheetTrigger>}
@@ -105,7 +131,12 @@ export default function CommentsSheet({
 						{isLoading ? (
 							<div className="text-center py-10">Loading comments...</div>
 						) : (
-							<CommentsList comments={comments} postAuthorId={postAuthorId} />
+							<CommentsList
+								comments={comments}
+								postAuthorId={postAuthorId}
+								canModerate={canModerate}
+								onModerate={handleModerate}
+							/>
 						)}
 					</ScrollArea>
 

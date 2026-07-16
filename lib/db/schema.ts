@@ -57,6 +57,7 @@ export const comments = pgTable("comments", {
 		.references(() => users.id, { onDelete: "cascade" })
 		.notNull(),
 	content: text("content").notNull(),
+	approved: boolean("approved").default(true).notNull(),
 	createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -73,19 +74,4 @@ export const likes = pgTable(
 		createdAt: timestamp("created_at").defaultNow().notNull(),
 	},
 	(t) => [uniqueIndex("likes_post_user_unique").on(t.postId, t.userId)],
-);
-
-export const savedPosts = pgTable(
-	"saved_posts",
-	{
-		id: uuid("id").primaryKey().defaultRandom(),
-		postId: uuid("post_id")
-			.references(() => posts.id, { onDelete: "cascade" })
-			.notNull(),
-		userId: uuid("user_id")
-			.references(() => users.id, { onDelete: "cascade" })
-			.notNull(),
-		createdAt: timestamp("created_at").defaultNow().notNull(),
-	},
-	(t) => [uniqueIndex("saved_posts_post_user_unique").on(t.postId, t.userId)],
 );

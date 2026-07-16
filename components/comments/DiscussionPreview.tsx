@@ -32,6 +32,8 @@ export default function DiscussionPreview({
 					key={comment.id}
 					comment={comment}
 					postAuthorId={postAuthorId}
+					canModerate={false}
+					onModerate={() => {}}
 				/>
 			))}
 		</div>

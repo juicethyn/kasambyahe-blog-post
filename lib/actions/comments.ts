@@ -6,6 +6,8 @@ import {
 	createComment,
 	getCommentCountByPostId,
 	getCommentsByPostId,
+	getCommentWithPostInfo,
+	updateCommentApproval,
 } from "@/lib/db/queries/comments";
 import { getPostById } from "@/lib/db/queries/posts";
 import {
@@ -70,6 +72,7 @@ export default async function addCommentAction(
 			comment: {
 				id: newComment.id,
 				content: newComment.content,
+				approved: newComment.approved,
 				createdAt: newComment.createdAt,
 				author: {
 					id: dbUser.id,
@@ -94,9 +97,16 @@ export async function getCommentsPageAction(
 	page: number,
 	pageSize = 10,
 ) {
+	const [dbUser, post] = await Promise.all([
+		getCurrentDbUserOrNull(),
+		getPostById(postId),
+	]);
+
+	const isOwner = Boolean(dbUser && post && dbUser.id === post.authorId);
+
 	const [comments, totalCount] = await Promise.all([
-		getCommentsByPostId(postId, page, pageSize),
-		getCommentCountByPostId(postId),
+		getCommentsByPostId(postId, page, pageSize, { includeHidden: isOwner }),
+		getCommentCountByPostId(postId, { includeHidden: isOwner }),
 	]);
 
 	return {
@@ -105,5 +115,45 @@ export async function getCommentsPageAction(
 		page,
 		pageSize,
 		totalPages: Math.ceil(totalCount / pageSize),
+	};
+}
+
+export async function moderateCommentAction(
+	commentId: string,
+	approved: boolean,
+): Promise<{ success: boolean; message?: string }> {
+	try {
+		const dbUser = await getCurrentDbUserOrNull();
+
+		if (!dbUser) {
+			return { success: false, message: "You must be logged in to do this." };
+		}
+
+		const commentInfo = await getCommentWithPostInfo(commentId);
+
+		if (!commentInfo) {
+			return { success: false, message: "Comment not found." };
+		}
+
+		if (commentInfo.postAuthorId !== dbUser.id) {
+			return {
+				success: false,
+				message: "You can only moderate comments on your own posts.",
+			};
+		}
+
+		await updateCommentApproval(commentId, approved);
+
+		revalidatePath(`/`);
+		revalidatePath(`/blogs/${commentInfo.postSlug}`);
+
+		return { success: true };
+	} catch (error) {
+		console.error(error);
+	}
+
+	return {
+		success: false,
+		message: "An error occurred while updating the comment.",
 	};
 }
