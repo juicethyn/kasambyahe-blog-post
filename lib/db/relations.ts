@@ -6,7 +6,6 @@ export const relations = defineRelations(schema, (r) => ({
 		posts: r.many.posts(),
 		comments: r.many.comments(),
 		likes: r.many.likes(),
-		savedPosts: r.many.savedPosts(),
 	},
 
 	posts: {
@@ -16,7 +15,6 @@ export const relations = defineRelations(schema, (r) => ({
 		}),
 		comments: r.many.comments(),
 		likes: r.many.likes(),
-		savedPosts: r.many.savedPosts(),
 	},
 
 	comments: {
@@ -37,17 +35,6 @@ export const relations = defineRelations(schema, (r) => ({
 		}),
 		user: r.one.users({
 			from: r.likes.userId,
-			to: r.users.id,
-		}),
-	},
-
-	savedPosts: {
-		post: r.one.posts({
-			from: r.savedPosts.postId,
-			to: r.posts.id,
-		}),
-		user: r.one.users({
-			from: r.savedPosts.userId,
 			to: r.users.id,
 		}),
 	},

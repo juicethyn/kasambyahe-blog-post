@@ -13,7 +13,7 @@ export default function MobileBottomNav() {
 
 	return (
 		<nav className="fixed inset-x-0 bottom-0 z-50 border-t border-[#FFF8F0] bg-background/95 backdrop-blur lg:hidden">
-			<div className="grid h-16 grid-cols-4">
+			<div className="grid h-16 grid-cols-3">
 				{NAV_LINKS.slice(0, 4).map((link) => {
 					const isActive = pathname === link.href;
 					const isSignedIn = Boolean(userId);

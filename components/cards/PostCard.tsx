@@ -1,4 +1,3 @@
-import { MessageCircle } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -10,13 +9,14 @@ import {
 } from "@/components/ui/card";
 import type { FeedPost } from "@/lib/types/post";
 import { formatRelativeDate } from "@/lib/utils/format-relative-date";
+import PostCommentButton from "../buttons/PostCommentButton";
 import PostLikeButton from "../buttons/PostLikeButton";
 
 interface PostCardProps {
 	post: FeedPost;
 }
 
-export default function PostCard({ post }: PostCardProps) {
+export default async function PostCard({ post }: PostCardProps) {
 	function truncateText(text: string, maxLength = 100): string {
 		if (text.length <= maxLength) {
 			return text;
@@ -67,13 +67,13 @@ export default function PostCard({ post }: PostCardProps) {
 							</p>
 						</div>
 					</div>
-					<div className="flex items-center justify-center gap-3 lg:gap-6 text-sm text-muted-foreground">
+					<div className="flex items-center justify-center gap-3 lg:gap-4 text-sm text-muted-foreground">
 						<PostLikeButton
 							postId={post.id}
 							liked={post.likedByCurrentUser}
 							likeCount={post.likesCount}
 						/>
-						<MessageCircle className="size-6" />
+						<PostCommentButton commentCount={post.commentCount} />
 					</div>
 				</CardFooter>
 			</Card>

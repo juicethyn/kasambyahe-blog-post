@@ -1,6 +1,7 @@
 export interface PostComment {
 	id: string;
 	content: string;
+	approved: boolean;
 	createdAt: Date;
 	author: {
 		id: string;

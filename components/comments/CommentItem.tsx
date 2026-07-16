@@ -6,11 +6,15 @@ import { Badge } from "../ui/badge";
 interface CommentItemProps {
 	comment: PostComment;
 	postAuthorId: string;
+	canModerate: boolean;
+	onModerate: (commentId: string, approved: boolean) => void;
 }
 
 export default function CommentItem({
 	comment,
 	postAuthorId,
+	canModerate,
+	onModerate,
 }: CommentItemProps) {
 	const isPostAuthor = comment.author.id === postAuthorId;
 
@@ -37,6 +41,16 @@ export default function CommentItem({
 						<p className="text-sm text-muted-foreground">
 							{formatRelativeDate(comment.createdAt)}
 						</p>
+
+						{canModerate && (
+							<button
+								type="button"
+								onClick={() => onModerate(comment.id, !comment.approved)}
+								className="ml-auto text-xs text-muted-foreground underline"
+							>
+								{comment.approved ? "Hide" : "Unhide"}
+							</button>
+						)}
 					</div>
 
 					{/* Comment */}

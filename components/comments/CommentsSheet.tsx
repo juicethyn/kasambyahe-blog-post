@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import {
 	Sheet,
 	SheetContent,
@@ -9,7 +9,10 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/components/ui/sheet";
-import { getCommentsPageAction } from "@/lib/actions/comments";
+import {
+	getCommentsPageAction,
+	moderateCommentAction,
+} from "@/lib/actions/comments";
 import type { PostComment } from "@/lib/types/comment";
 import {
 	Pagination,
@@ -30,6 +33,7 @@ interface CommentsSheetProps {
 	initialComments: PostComment[];
 	trigger?: React.ReactNode;
 	defaultOpen?: boolean;
+	canModerate: boolean;
 }
 
 export default function CommentsSheet({
@@ -39,10 +43,13 @@ export default function CommentsSheet({
 	initialComments,
 	trigger,
 	defaultOpen,
+	canModerate,
 }: CommentsSheetProps) {
 	const [comments, setComments] = useState<PostComment[]>(initialComments);
 	const [currentPage, setCurrentPage] = useState(1);
-	const [totalPages, setTotalPages] = useState(Math.ceil(commentCount / 10));
+	const totalPages = Math.max(1, Math.ceil(commentCount / 10));
+	const pageInRef = useRef({ currentPage, totalPages });
+	pageInRef.current = { currentPage, totalPages };
 	const [isLoading, setIsLoading] = useState(false);
 	const [count, setCount] = useState(commentCount);
 	const [open, setOpen] = useState(defaultOpen ?? false);
@@ -55,7 +62,6 @@ export default function CommentsSheet({
 				const result = await getCommentsPageAction(postId, page, 10);
 				setComments(result.comments);
 				setCurrentPage(result.page);
-				setTotalPages(result.totalPages);
 				setCount(result.totalCount);
 			} catch (error) {
 				console.error("Error loading comments:", error);
@@ -83,11 +89,31 @@ export default function CommentsSheet({
 
 			setCount((prev) => {
 				const next = prev + 1;
-				setTotalPages(Math.ceil(next / 10));
 				return next;
 			});
 		},
 		[currentPage, totalPages],
+	);
+
+	const handleModerate = useCallback(
+		async (commentId: string, approved: boolean) => {
+			setComments((prev) =>
+				prev.map((c) => (c.id === commentId ? { ...c, approved } : c)),
+			);
+
+			const result = await moderateCommentAction(commentId, approved);
+
+			if (!result.success) {
+				setComments((prev) =>
+					prev.map((c) =>
+						c.id === commentId ? { ...c, approved: !approved } : c,
+					),
+				);
+				console.error(result.message);
+			}
+			await loadPage(currentPage);
+		},
+		[loadPage, currentPage],
 	);
 
 	return (
@@ -105,7 +131,12 @@ export default function CommentsSheet({
 						{isLoading ? (
 							<div className="text-center py-10">Loading comments...</div>
 						) : (
-							<CommentsList comments={comments} postAuthorId={postAuthorId} />
+							<CommentsList
+								comments={comments}
+								postAuthorId={postAuthorId}
+								canModerate={canModerate}
+								onModerate={handleModerate}
+							/>
 						)}
 					</ScrollArea>
 

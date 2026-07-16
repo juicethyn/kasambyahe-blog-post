@@ -33,10 +33,12 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 		notFound();
 	}
 
-	const [dbUser, comments, commentCount] = await Promise.all([
-		getCurrentDbUserOrNull(),
-		getCommentsByPostId(post.id),
-		getCommentCountByPostId(post.id),
+	const dbUser = await getCurrentDbUserOrNull();
+	const isOwner = dbUser?.id === post.author.id;
+
+	const [comments, commentCount] = await Promise.all([
+		getCommentsByPostId(post.id, 1, 10, { includeHidden: isOwner }),
+		getCommentCountByPostId(post.id, { includeHidden: isOwner }),
 	]);
 
 	return (
@@ -104,6 +106,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 								commentCount={commentCount}
 								initialComments={comments}
 								trigger={<PostCommentButton commentCount={commentCount} />}
+								canModerate={isOwner}
 							/>
 						</div>
 					</div>
@@ -120,6 +123,7 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 						postAuthorId={post.author.id}
 						commentCount={commentCount}
 						comments={comments}
+						canModerate={isOwner}
 					/>
 				</Suspense>
 			</section>

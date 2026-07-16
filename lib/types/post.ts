@@ -16,6 +16,7 @@ export interface FeedPost {
 	};
 	likesCount: number;
 	likedByCurrentUser: boolean;
+	commentCount: number;
 }
 
 export interface PostFormValues {
