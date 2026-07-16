@@ -85,6 +85,8 @@ lib/
  ├── db/
  ├── schema/
  ├── types/
+ ├── validations/
+ ├── utils/
 scripts/
 public/
 ```
