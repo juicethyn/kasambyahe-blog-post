@@ -98,9 +98,9 @@ public/
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/<your-username>/kasambyahe.git
+git clone https://github.com/juicethyn/kasambyahe-blog-post.git
 
-cd kasambyahe
+cd kasambyahe-blog-post
 ```
 
 ---
