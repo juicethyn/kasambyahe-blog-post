@@ -83,7 +83,6 @@ lib/
  ├── actions/
  ├── auth/
  ├── db/
- ├── schema/
  ├── types/
  ├── validations/
  ├── utils/
@@ -212,20 +211,6 @@ Current schema includes:
 - ✅ Responsive UI
 - ✅ Skeleton Loading
 - ✅ Deployment
-
----
-
-## Future Improvements
-
-Some features planned for future versions include:
-
-- Saved Posts
-- Search
-- Categories & Tags
-- Notifications
-- Infinite Scrolling
-- Richer analytics
-- Admin dashboard
 
 ---
 
